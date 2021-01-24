@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazorade.Msal", "Blazorade.Msal\Blazorade.Msal.csproj", "{765AB143-8B42-45D1-B98B-DBAD2DDC400E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazorade.Msal", "Blazorade.Msal\Blazorade.Msal.csproj", "{765AB143-8B42-45D1-B98B-DBAD2DDC400E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Submodules", "Submodules", "{D517601D-7238-4EE9-8BE4-8395A1FC4254}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazorade.Core", "Blazorade-Core\Blazorade.Core\Blazorade.Core.csproj", "{7F3DD576-37E1-4493-A872-36F3B5A65C0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Apps", "Test Apps", "{DFBDDB47-E181-4F5F-9292-84F6B869D856}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTestApp", "ServerTestApp\ServerTestApp.csproj", "{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +35,37 @@ Global
 		{765AB143-8B42-45D1-B98B-DBAD2DDC400E}.Release|x64.Build.0 = Release|Any CPU
 		{765AB143-8B42-45D1-B98B-DBAD2DDC400E}.Release|x86.ActiveCfg = Release|Any CPU
 		{765AB143-8B42-45D1-B98B-DBAD2DDC400E}.Release|x86.Build.0 = Release|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Debug|x64.Build.0 = Debug|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Debug|x86.Build.0 = Debug|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Release|x64.ActiveCfg = Release|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Release|x64.Build.0 = Release|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Release|x86.ActiveCfg = Release|Any CPU
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A}.Release|x86.Build.0 = Release|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Debug|x64.Build.0 = Debug|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Debug|x86.Build.0 = Debug|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|x64.ActiveCfg = Release|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|x64.Build.0 = Release|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|x86.ActiveCfg = Release|Any CPU
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F3DD576-37E1-4493-A872-36F3B5A65C0A} = {D517601D-7238-4EE9-8BE4-8395A1FC4254}
+		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0} = {DFBDDB47-E181-4F5F-9292-84F6B869D856}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A02B975-9E79-4692-8B2F-B5B4063C67FF}
