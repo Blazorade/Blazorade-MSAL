@@ -1,0 +1,3 @@
+[submodule "Blazorade-Core"]
+	path = Blazorade-Core
+	url = https://github.com/Blazorade/Blazorade-Core.git

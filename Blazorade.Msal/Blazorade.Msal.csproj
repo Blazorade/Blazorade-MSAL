@@ -10,8 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazorade.Core" Version="1.4.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blazorade-Core\Blazorade.Core\Blazorade.Core.csproj" />
   </ItemGroup>
 
 </Project>
