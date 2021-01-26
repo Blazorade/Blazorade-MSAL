@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MsalTestConsole": {
+      "commandName": "Project",
+      "commandLineArgs": "d69feea1-513d-472b-b129-9d027c782fdb mikabdev.onmicrosoft.com mika@mikabdev.onmicrosoft.com"
+    }
+  }
+}
