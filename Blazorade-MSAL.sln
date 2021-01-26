@@ -13,6 +13,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Apps", "Test Apps", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTestApp", "ServerTestApp\ServerTestApp.csproj", "{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{03D1A783-7EF5-4AA5-ADAC-F11BEFAAA22D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.gitmodules = .gitmodules
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsalTestConsole", "MsalTestConsole\MsalTestConsole.csproj", "{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +69,18 @@ Global
 		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|x64.Build.0 = Release|Any CPU
 		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|x86.ActiveCfg = Release|Any CPU
 		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0}.Release|x86.Build.0 = Release|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Debug|x64.Build.0 = Debug|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Debug|x86.Build.0 = Debug|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Release|x64.ActiveCfg = Release|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Release|x64.Build.0 = Release|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Release|x86.ActiveCfg = Release|Any CPU
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +88,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7F3DD576-37E1-4493-A872-36F3B5A65C0A} = {D517601D-7238-4EE9-8BE4-8395A1FC4254}
 		{A0B990E3-9C41-4923-A7B3-C1C6AF879EA0} = {DFBDDB47-E181-4F5F-9292-84F6B869D856}
+		{F83AD5AF-2851-44C8-B9EF-C0E0555F4665} = {DFBDDB47-E181-4F5F-9292-84F6B869D856}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A02B975-9E79-4692-8B2F-B5B4063C67FF}
