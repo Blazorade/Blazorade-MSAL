@@ -49,13 +49,13 @@ namespace Blazorade.Msal.Services
 
         public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint)
         {
-            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.DefaultDialog)
+            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Dialog)
             {
                 return await this.AcquireTokenPopupAsync(loginHint);
             }
-            else if(this.Options.InteractiveLoginMode == InteractiveLoginMode.CustomDialog)
+            else if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
             {
-                return await this.AcquireTokenDialogAsync(loginHint);
+                return await this.AcquireTokenRedirectAsync(loginHint);
             }
 
             return null;
@@ -81,7 +81,7 @@ namespace Blazorade.Msal.Services
             return await handler.GetResultAsync();
         }
 
-        protected async Task<AuthenticationResult> AcquireTokenDialogAsync(string loginHint)
+        protected async Task<AuthenticationResult> AcquireTokenRedirectAsync(string loginHint)
         {
 
             return null;

@@ -12,7 +12,7 @@ namespace Blazorade.Msal.Configuration
         public BlazoradeMsalOptions()
         {
             this.MsalVersion = "2.8.0";
-            this.InteractiveLoginMode = InteractiveLoginMode.DefaultDialog;
+            this.InteractiveLoginMode = InteractiveLoginMode.Dialog;
         }
 
 
