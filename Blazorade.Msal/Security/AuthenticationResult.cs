@@ -13,6 +13,8 @@ namespace Blazorade.Msal.Security
             this.IdTokenClaims = new Dictionary<string, object>();
         }
 
+        public string Authority { get; set; }
+
         public string UniqueId { get; set; }
 
         public string TenantId { get; set; }

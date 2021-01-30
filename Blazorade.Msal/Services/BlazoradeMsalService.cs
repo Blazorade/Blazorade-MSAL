@@ -49,11 +49,11 @@ namespace Blazorade.Msal.Services
 
         public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint)
         {
-            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Popup)
+            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.DefaultDialog)
             {
                 return await this.AcquireTokenPopupAsync(loginHint);
             }
-            else if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Dialog)
+            else if(this.Options.InteractiveLoginMode == InteractiveLoginMode.CustomDialog)
             {
                 return await this.AcquireTokenDialogAsync(loginHint);
             }

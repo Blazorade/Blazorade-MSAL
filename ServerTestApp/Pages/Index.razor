@@ -4,9 +4,20 @@
 
 @code{
     string loginHint;
+    IEnumerable<string> scopes;
+    AuthenticationResult token;
+
     private async Task LoginClickAsync(MouseEventArgs e)
     {
-        var token = await this.msalService.AcquireTokenAsync(this.loginHint);
+        token = null;
+        this.StateHasChanged();
+
+        this.token = await msalService.AcquireTokenAsync(this.loginHint);
+        if(null != this.token)
+        {
+            this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
+            this.StateHasChanged();
+        }
     }
 }
 
@@ -24,7 +35,11 @@ Welcome to your new app.
 <div class="input-group">
     <input id="login-hint" type="text" class="form-control" placeholder="Login hint" @bind-value="this.loginHint" @bind-value:event="oninput" />
     <div class="input-group-append">
-        <button class="btn btn-primary" @onclick="this.LoginClickAsync" disabled="@(!(this.loginHint?.Length > 0))">Log In</button>
+        <button class="btn btn-primary" @onclick="this.LoginClickAsync">Log In</button>
     </div>
 </div>
 
+@if(null != this.token)
+{
+    <TokenViewer Token="token" />
+}

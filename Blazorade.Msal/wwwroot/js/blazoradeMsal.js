@@ -6,6 +6,13 @@ export function acquireTokenSilent(args) {
     console.debug("acquireTokenSilent", "msalClient", msalClient);
 
     let account = msalClient.getAccountByUsername(args.data.loginHint);
+
+    if (!account) {
+        console.warn("acquireTokenSilent", "loginHint did not find an account. Falling back to current account.");
+        let accounts = msalClient.getAllAccounts();
+        if (accounts && accounts.length) account = accounts[0];
+    }
+
     console.debug("acquireTokenSilent", "account", account);
 
     let request = {
