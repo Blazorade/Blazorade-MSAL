@@ -34,6 +34,7 @@ namespace ServerTestApp
                     var config = root.GetSection("app");
                     o.ClientId = config.GetValue<string>("clientId");
                     o.TenantId = config.GetValue<string>("tenantId");
+                    o.DefaultScopes = new string[] { "openid", "profile" };
                 })
                 ;
         }

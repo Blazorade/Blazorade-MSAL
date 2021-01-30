@@ -24,12 +24,12 @@ namespace Blazorade.Msal.Services
 
 
 
-        public async Task<AuthenticationResult> AcquireTokenAsync(string loginHint)
+        public async Task<AuthenticationResult> AcquireTokenAsync(string loginHint = null, IEnumerable<string> scopes = null)
         {
             AuthenticationResult result = null;
             try
             {
-                result = await this.AcquireTokenSilentAsync(loginHint);
+                result = await this.AcquireTokenSilentAsync(loginHint, scopes);
             }
             // Deliberately just swallowing any error, since if we cannot get a token this way, then we use another fallback method.
             catch (FailureCallbackException) { }
@@ -39,7 +39,7 @@ namespace Blazorade.Msal.Services
             {
                 try
                 {
-                    result = await this.AcquireTokenInteractiveAsync(loginHint);
+                    result = await this.AcquireTokenInteractiveAsync(loginHint, scopes);
                 }
                 catch (FailureCallbackException) { }
             }
@@ -47,21 +47,21 @@ namespace Blazorade.Msal.Services
             return result;
         }
 
-        public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint)
+        public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint = null, IEnumerable<string> scopes = null)
         {
             if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Dialog)
             {
-                return await this.AcquireTokenPopupAsync(loginHint);
+                return await this.AcquireTokenPopupAsync(loginHint, scopes);
             }
             else if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
             {
-                return await this.AcquireTokenRedirectAsync(loginHint);
+                return await this.AcquireTokenRedirectAsync(loginHint, scopes);
             }
 
             return null;
         }
 
-        public async Task<AuthenticationResult> AcquireTokenSilentAsync(string loginHint)
+        public async Task<AuthenticationResult> AcquireTokenSilentAsync(string loginHint = null, IEnumerable<string> scopes = null)
         {
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData(loginHint);
@@ -72,7 +72,7 @@ namespace Blazorade.Msal.Services
 
 
 
-        protected async Task<AuthenticationResult> AcquireTokenPopupAsync(string loginHint)
+        protected async Task<AuthenticationResult> AcquireTokenPopupAsync(string loginHint = null, IEnumerable<string> scopes = null)
         {
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData(loginHint);
@@ -81,7 +81,7 @@ namespace Blazorade.Msal.Services
             return await handler.GetResultAsync();
         }
 
-        protected async Task<AuthenticationResult> AcquireTokenRedirectAsync(string loginHint)
+        protected async Task<AuthenticationResult> AcquireTokenRedirectAsync(string loginHint = null, IEnumerable<string> scopes = null)
         {
 
             return null;
@@ -89,11 +89,11 @@ namespace Blazorade.Msal.Services
 
 
 
-        private Dictionary<string, object> CreateMsalData(string loginHint)
+        private Dictionary<string, object> CreateMsalData(string loginHint = null, IEnumerable<string> scopes = null)
         {
             var data = new Dictionary<string, object>
             {
-                { "loginHint", loginHint },
+                { "scopes", scopes?.Count() > 0 ? scopes : this.Options.DefaultScopes?.Count() > 0 ? this.Options.DefaultScopes : new string[] { ".default" } },
                 {
                     "msalConfig",
                     new Dictionary<string, object>
@@ -109,6 +109,11 @@ namespace Blazorade.Msal.Services
                     }
                 },
             };
+
+            if(loginHint?.Length > 0)
+            {
+                data["loginHint"] = loginHint;
+            }
 
             return data;
         }

@@ -13,6 +13,7 @@ namespace Blazorade.Msal.Configuration
         {
             this.MsalVersion = "2.8.0";
             this.InteractiveLoginMode = InteractiveLoginMode.Dialog;
+            this.DefaultScopes = new string[] { ".default" };
         }
 
 
@@ -23,6 +24,8 @@ namespace Blazorade.Msal.Configuration
         public string MsalVersion { get; set; }
 
         public InteractiveLoginMode InteractiveLoginMode { get; set; }
+
+        public IEnumerable<string> DefaultScopes { get; set; }
 
     }
 }
