@@ -17,7 +17,7 @@ export function acquireTokenSilent(args) {
 
     let request = {
         account: account,
-        scopes: getScopes(args),
+        scopes: args.data.scopes,
         authority: args.data.msalConfig.auth.authority
     };
     console.debug("acquireTokenSilent", "request", request);
@@ -45,7 +45,7 @@ export function acquireTokenPopup(args) {
     console.debug("acquireTokenPopup", "msalClient", msalClient);
 
     let request = {
-        scopes: getScopes(args),
+        scopes: args.data.scopes,
         authority: args.data.msalConfig.auth.authority,
         loginHint: args.data.loginHint
     };
@@ -64,8 +64,71 @@ export function acquireTokenPopup(args) {
     }
     catch (err) {
         console.error("acquireTokenPopup", "Failure calling MSAL client", err);
+        invokeCallback(args.failureCallback, err);
     }
 }
+
+export function acquireTokenRedirect(args) {
+    console.debug("acquireTokenRedirect", args);
+
+    let msalClient = createMsalClient(args);
+    console.debug("acquireTokenRedirect", "msalClient", msalClient);
+
+    let request = {
+        scopes: args.data.scopes,
+        authority: args.data.msalConfig.auth.authority,
+        loginHint: args.data.loginHint,
+        redirectUri: args.data.msalConfig.auth.redirectUri
+    };
+    console.debug("acquireTokenRedirect", "request", request);
+
+    try {
+        msalClient.acquireTokenRedirect(request);
+        invokeCallback(args.successCallback, null);
+    }
+    catch (err) {
+        console.error("acquireTokenRedirect", "Failure calling MSAL client", err);
+        invokeCallback(args.failureCallback, err);
+    }
+}
+
+export function handleRedirectPromise(args) {
+    console.debug("handleRedirectPromise", args);
+
+    let msalClient = createMsalClient(args);
+    console.debug("handleRedirectPromise", "msalClient", msalClient);
+
+    try {
+        msalClient.handleRedirectPromise()
+            .then(result => {
+                console.debug("handleRedirectPromise", "success", result);
+                invokeCallback(args.successCallback, result);
+            })
+            .catch(err => {
+                console.error("handleRedirectPromise", "failure", err);
+                invokeCallback(args.failureCallback, err);
+            });
+    }
+    catch (err) {
+        console.error("handleRedirectPromise", "Failure calling MSAL client", err);
+    }
+}
+
+export function logout(args) {
+    console.debug("logout", args);
+
+    let msalClient = createMsalClient(args);
+    let request = {};
+    let logoutUrl = getLogoutUrl(args);
+    if (logoutUrl) {
+        request["postLogoutRedirectUri"] = logoutUrl;
+    }
+
+    console.debug("logout", "request", request);
+
+    msalClient.logout(request);
+}
+
 
 function createMsalClient(args) {
     console.debug("createMsalClient", args);
@@ -77,12 +140,12 @@ function createMsalClient(args) {
     return msalClient;
 }
 
-function getScopes(args) {
-    if (args && args.data && args.data.scopes) {
-        return args.data.scopes;
-    }
+function getLogoutUrl(args) {
 
-    return [".default"];
+    if (args && args.msalConfig && args.msalConfig.auth) {
+        return args.msalConfig.auth["postLogoutRedirectUri"];
+    }
+    return null;
 }
 
 function invokeCallback(callback, ...args) {
@@ -98,7 +161,8 @@ function invokeCallback(callback, ...args) {
 function setMsalConfigDefault(msalConfig) {
     console.debug("setMsalConfigDefault", msalConfig);
 
-    msalConfig.auth.redirectUri = window.location.origin;
+    msalConfig.auth = msalConfig.auth ?? {};
+    msalConfig.auth.redirectUri = msalConfig.auth.redirectUri ?? window.location.origin;
     msalConfig.cache = {
         cacheLocation: "localStorage"
     };

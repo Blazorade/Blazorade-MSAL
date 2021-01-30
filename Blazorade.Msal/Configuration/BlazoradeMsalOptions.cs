@@ -27,5 +27,9 @@ namespace Blazorade.Msal.Configuration
 
         public IEnumerable<string> DefaultScopes { get; set; }
 
+        public string RedirectUrl { get; set; }
+
+        public string LogoutUrl { get; set; }
+
     }
 }

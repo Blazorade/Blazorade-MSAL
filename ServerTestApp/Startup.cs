@@ -1,3 +1,4 @@
+using Blazorade.Msal.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,11 @@ namespace ServerTestApp
                     var config = root.GetSection("app");
                     o.ClientId = config.GetValue<string>("clientId");
                     o.TenantId = config.GetValue<string>("tenantId");
+
                     o.DefaultScopes = new string[] { "openid", "profile" };
+                    o.RedirectUrl = "/login";
+                    o.LogoutUrl = "/loggedout";
+                    o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
                 })
                 ;
         }

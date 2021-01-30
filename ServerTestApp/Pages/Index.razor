@@ -4,20 +4,30 @@
 
 @code{
     string loginHint;
-    IEnumerable<string> scopes;
+    string scopeString;
     AuthenticationResult token;
 
     private async Task LoginClickAsync(MouseEventArgs e)
     {
-        token = null;
-        this.StateHasChanged();
-
-        this.token = await msalService.AcquireTokenAsync(this.loginHint);
+        IEnumerable<string> scopes = this.scopeString?.Length > 0 ? this.scopeString.Split(",", options: StringSplitOptions.RemoveEmptyEntries) : null;
+        this.token = await msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
         if(null != this.token)
         {
             this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
+
+            if (string.IsNullOrEmpty(this.scopeString))
+            {
+                this.scopeString = string.Join(",", this.token.Scopes);
+            }
+
             this.StateHasChanged();
         }
+    }
+
+    private async Task LogoutAsync(MouseEventArgs e)
+    {
+        await this.msalService.LogoutAsync();
+        this.StateHasChanged();
     }
 }
 
@@ -32,10 +42,17 @@ Welcome to your new app.
 
 <hr />
 
+<button class="btn btn-outline-secondary" @onclick="this.LogoutAsync">Log out</button>
+<hr />
+
+<div class="form-group">
+    <input id="login-hint" type="text" name="login-hint" class="form-control" placeholder="Login hint" @bind-value="this.loginHint" @bind-value:event="oninput" />
+</div>
+
 <div class="input-group">
-    <input id="login-hint" type="text" class="form-control" placeholder="Login hint" @bind-value="this.loginHint" @bind-value:event="oninput" />
+    <input name="scopes" type="text" class="form-control" placeholder="Comma-separated list of scopes." @bind-value="this.scopeString" @bind-value:event="oninput" />
     <div class="input-group-append">
-        <button class="btn btn-primary" @onclick="this.LoginClickAsync">Log In</button>
+        <button class="btn btn-primary" @onclick="this.LoginClickAsync">Get Token</button>
     </div>
 </div>
 
