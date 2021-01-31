@@ -6,6 +6,7 @@
 
     AuthenticationResult token = null;
     string scopeString = null;
+    string loginHint = null;
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -30,7 +31,7 @@
     private async Task GetTokenAsync(MouseEventArgs e)
     {
         var scopes = (this.scopeString ?? "").Split(',');
-        this.token = await this.msalService.AcquireTokenAsync(scopes: scopes);
+        this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
         this.SetUIFromToken();
     }
 
@@ -38,6 +39,7 @@
     {
         if (null != this.token)
         {
+            this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
             this.scopeString = string.Join(',', this.token.Scopes);
             this.StateHasChanged();
         }
@@ -53,6 +55,7 @@
 <hr />
 
 <div class="input-group">
+    <input type="text" name="login-hint" class="form-control" placeholder="Type in a login hint" @bind-value="this.loginHint" @bind-value:event="oninput" />
     <input type="text" name="scopes" class="form-control" placeholder="Comma-separated list of tokens to acquire" @bind-value="this.scopeString" @bind-value:event="oninput" />
     <div class="input-group-append">
         <button type="button" class="btn btn-primary" @onclick="this.GetTokenAsync">Get Token</button>
