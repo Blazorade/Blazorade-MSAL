@@ -27,9 +27,8 @@ namespace BlazorWasmSample
                     o.ClientId = config.GetValue<string>("clientId");
                     o.TenantId = config.GetValue<string>("tenantId");
 
-                    o.DefaultScopes = new string[] { "user.read" };
-                    o.LogoutUrl = "/loggedout";
-                    o.InteractiveLoginMode = InteractiveLoginMode.Dialog;
+                    o.PostLogoutUrl = "/loggedout";
+                    o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
                 })
                 ;
 

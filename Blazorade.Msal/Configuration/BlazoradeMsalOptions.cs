@@ -11,9 +11,9 @@ namespace Blazorade.Msal.Configuration
 
         public BlazoradeMsalOptions()
         {
-            this.MsalVersion = "2.8.0";
+            this.MsalVersion = "2.9.0";
             this.InteractiveLoginMode = InteractiveLoginMode.Dialog;
-            this.DefaultScopes = new string[] { ".default" };
+            this.DefaultScopes = new string[] { "openid", "profile" };
         }
 
 
@@ -29,7 +29,7 @@ namespace Blazorade.Msal.Configuration
 
         public string RedirectUrl { get; set; }
 
-        public string LogoutUrl { get; set; }
+        public string PostLogoutUrl { get; set; }
 
     }
 }

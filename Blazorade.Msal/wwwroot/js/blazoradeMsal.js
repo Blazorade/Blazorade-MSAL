@@ -8,9 +8,18 @@ export function acquireTokenSilent(args) {
     let account = msalClient.getAccountByUsername(args.data.loginHint);
 
     if (!account) {
-        console.warn("acquireTokenSilent", "loginHint did not find an account. Falling back to current account.");
-        let accounts = msalClient.getAllAccounts();
-        if (accounts && accounts.length) account = accounts[0];
+        console.warn("acquireTokenSilent", "loginHint did not find an account. Tokens can most likely not be acquired without a found account.");
+        if (args.data.fallbackToDefaultAccount) {
+            let loginHint = getDefaultLoginHint(args);
+            console.debug("acquireTokenSilent", "fallback login hint", loginHint);
+
+            if (loginHint) {
+                account = msalClient.getAccountByUsername(loginHint);
+                if (account) {
+                    console.debug("acquireTokenSilent", "Fallback to default account", account);
+                }
+            }
+        }
     }
 
     console.debug("acquireTokenSilent", "account", account);
@@ -26,6 +35,7 @@ export function acquireTokenSilent(args) {
         msalClient.acquireTokenSilent(request)
             .then(result => {
                 console.debug("acquireTokenSilent", "success", result);
+                setDefaultLoginHint(args, result);
                 invokeCallback(args.successCallback, result);
             }).catch(err => {
                 console.warn("acquireTokenSilent", "failure", err);
@@ -55,6 +65,7 @@ export function acquireTokenPopup(args) {
         msalClient.acquireTokenPopup(request)
             .then(result => {
                 console.debug("acquireTokenPopup", "success", result);
+                setDefaultLoginHint(args, result);
                 invokeCallback(args.successCallback, result);
             })
             .catch(err => {
@@ -102,6 +113,7 @@ export function handleRedirectPromise(args) {
         msalClient.handleRedirectPromise()
             .then(result => {
                 console.debug("handleRedirectPromise", "success", result);
+                setDefaultLoginHint(args, result);
                 invokeCallback(args.successCallback, result);
             })
             .catch(err => {
@@ -140,6 +152,17 @@ function createMsalClient(args) {
     return msalClient;
 }
 
+function getDefaultLoginHint(args) {
+    console.debug("getDefaultLoginHint", args);
+
+    let key = `${args.data.msalConfig.auth.clientId}.blazorade-default-loginHint`;
+    console.debug("getDefaultLoginHint", "key", key);
+
+    let loginHint = window.localStorage.getItem(key);
+    console.log("getDefaultLoginHint", "loginHint", loginHint);
+    return loginHint;
+}
+
 function getLogoutUrl(args) {
 
     if (args && args.msalConfig && args.msalConfig.auth) {
@@ -158,6 +181,18 @@ function invokeCallback(callback, ...args) {
     }
 }
 
+function setDefaultLoginHint(args, authResult) {
+    console.debug("setDefaultAccount", args, authResult);
+
+    if (authResult && authResult.account && authResult.account.username) {
+        console.debug("setDefaultAccount", authResult.account.username);
+
+        let key = `${args.data.msalConfig.auth.clientId}.blazorade-default-loginHint`;
+        window.localStorage.setItem(key, authResult.account.username);
+        console.debug("key", key);
+    }
+}
+
 function setMsalConfigDefault(msalConfig) {
     console.debug("setMsalConfigDefault", msalConfig);
 
@@ -167,3 +202,4 @@ function setMsalConfigDefault(msalConfig) {
         cacheLocation: "localStorage"
     };
 }
+

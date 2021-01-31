@@ -64,7 +64,7 @@ namespace Blazorade.Msal.Services
             return null;
         }
 
-        public async Task<AuthenticationResult> AcquireTokenSilentAsync(string loginHint = null, IEnumerable<string> scopes = null)
+        public async Task<AuthenticationResult> AcquireTokenSilentAsync(string loginHint = null, IEnumerable<string> scopes = null, bool fallbackToDefaultAccount = false)
         {
             AuthenticationResult result = null;
             var module = await this.GetBlazoradeModuleAsync();
@@ -80,8 +80,7 @@ namespace Blazorade.Msal.Services
 
             if(null == result)
             {
-                var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes);
-
+                var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes, fallbackToDefaultAccount: fallbackToDefaultAccount);
                 var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenSilent", data);
                 result = await handler.GetResultAsync();
             }
@@ -130,7 +129,7 @@ namespace Blazorade.Msal.Services
 
 
 
-        private Dictionary<string, object> CreateMsalData(string loginHint = null, IEnumerable<string> scopes = null, bool navigateToLoginRequestUrl = true)
+        private Dictionary<string, object> CreateMsalConfig(bool navigateToLoginRequestUrl = true)
         {
             var auth = new Dictionary<string, object>
             {
@@ -140,13 +139,13 @@ namespace Blazorade.Msal.Services
             };
 
             var redirectUri = this.CreateAbsoluteUri(this.Options.RedirectUrl);
-            if(null != redirectUri)
+            if (null != redirectUri)
             {
                 auth["redirectUri"] = redirectUri;
             }
 
-            var postLogoutRedirectUri = this.CreateAbsoluteUri(this.Options.LogoutUrl);
-            if(null != postLogoutRedirectUri)
+            var postLogoutRedirectUri = this.CreateAbsoluteUri(this.Options.PostLogoutUrl);
+            if (null != postLogoutRedirectUri)
             {
                 auth["postLogoutRedirectUri"] = postLogoutRedirectUri;
             }
@@ -155,6 +154,12 @@ namespace Blazorade.Msal.Services
             {
                 { "auth", auth }
             };
+            return msalConfig;
+        }
+
+        private Dictionary<string, object> CreateMsalData(string loginHint = null, IEnumerable<string> scopes = null, bool navigateToLoginRequestUrl = true, bool fallbackToDefaultAccount = false)
+        {
+            var msalConfig = this.CreateMsalConfig(navigateToLoginRequestUrl);
 
             var data = new Dictionary<string, object>
             {
@@ -167,6 +172,10 @@ namespace Blazorade.Msal.Services
                 data["loginHint"] = loginHint;
             }
 
+            if (fallbackToDefaultAccount)
+            {
+                data["fallbackToDefaultAccount"] = true;
+            }
 
             return data;
         }

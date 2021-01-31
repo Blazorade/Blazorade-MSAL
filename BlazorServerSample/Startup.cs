@@ -37,8 +37,7 @@ namespace BlazorServerSample
                     o.TenantId = config.GetValue<string>("tenantId");
 
                     o.DefaultScopes = new string[] { "openid", "profile" };
-                    o.LogoutUrl = "/loggedout";
-                    o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
+                    o.PostLogoutUrl = "/loggedout";
                 })
                 ;
         }
