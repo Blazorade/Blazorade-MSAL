@@ -10,15 +10,7 @@ export function acquireTokenSilent(args) {
     if (!account) {
         console.warn("acquireTokenSilent", "loginHint did not find an account. Tokens can most likely not be acquired without a found account.");
         if (args.data.fallbackToDefaultAccount) {
-            let loginHint = getDefaultLoginHint(args);
-            console.debug("acquireTokenSilent", "fallback login hint", loginHint);
-
-            if (loginHint) {
-                account = msalClient.getAccountByUsername(loginHint);
-                if (account) {
-                    console.debug("acquireTokenSilent", "Fallback to default account", account);
-                }
-            }
+            account = getDefaultAccount(args, msalClient);
         }
     }
 
@@ -150,6 +142,19 @@ function createMsalClient(args) {
     console.debug("createMsalClient", "msalClient", msalClient);
 
     return msalClient;
+}
+
+function getDefaultAccount(args, msalClient) {
+    let account;
+    let loginHint = getDefaultLoginHint(args);
+    console.debug("getDefaultAccount", "Default login hint", loginHint);
+
+    if (loginHint) {
+        account = msalClient.getAccountByUsername(loginHint);
+        console.debug("getDefaultAccount", "Using default account", account);
+    }
+
+    return account;
 }
 
 function getDefaultLoginHint(args) {

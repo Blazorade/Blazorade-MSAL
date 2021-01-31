@@ -33,8 +33,6 @@ namespace Blazorade.Msal.Security
 
         public Account Account { get; set; }
 
-        public string AccountState { get; set; }
-
         public bool FromCache { get; set; }
 
     }

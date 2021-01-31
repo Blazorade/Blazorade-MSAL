@@ -12,7 +12,7 @@ namespace Blazorade.Msal.Configuration
         public BlazoradeMsalOptions()
         {
             this.MsalVersion = "2.9.0";
-            this.InteractiveLoginMode = InteractiveLoginMode.Dialog;
+            this.InteractiveLoginMode = InteractiveLoginMode.Popup;
             this.DefaultScopes = new string[] { "openid", "profile" };
         }
 

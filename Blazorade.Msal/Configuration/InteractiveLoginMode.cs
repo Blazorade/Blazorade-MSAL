@@ -14,7 +14,7 @@ namespace Blazorade.Msal.Configuration
         /// <summary>
         /// Uses the default popup provided by MSAL for interactive login. This usually works in web applications.
         /// </summary>
-        Dialog,
+        Popup,
 
         /// <summary>
         /// Handles login by using redirection.

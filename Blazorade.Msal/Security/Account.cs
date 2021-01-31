@@ -8,10 +8,6 @@ namespace Blazorade.Msal.Security
 {
     public sealed class Account
     {
-        public string AccountIdentifier { get; set; }
-
-        public string HomeAccountIdentifier { get; set; }
-
         public string UserName { get; set; }
 
         public string Name { get; set; }

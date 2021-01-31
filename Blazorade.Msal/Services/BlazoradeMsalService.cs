@@ -27,12 +27,12 @@ namespace Blazorade.Msal.Services
 
 
 
-        public async Task<AuthenticationResult> AcquireTokenAsync(string loginHint = null, IEnumerable<string> scopes = null)
+        public async Task<AuthenticationResult> AcquireTokenAsync(string loginHint = null, IEnumerable<string> scopes = null, bool fallbackToDefaultAccount = false)
         {
             AuthenticationResult result = null;
             try
             {
-                result = await this.AcquireTokenSilentAsync(loginHint, scopes);
+                result = await this.AcquireTokenSilentAsync(loginHint: loginHint, scopes: scopes, fallbackToDefaultAccount: fallbackToDefaultAccount);
             }
             // Deliberately just swallowing any error, since if we cannot get a token this way, then we use another fallback method.
             catch (FailureCallbackException) { }
@@ -42,7 +42,7 @@ namespace Blazorade.Msal.Services
             {
                 try
                 {
-                    result = await this.AcquireTokenInteractiveAsync(loginHint, scopes);
+                    result = await this.AcquireTokenInteractiveAsync(loginHint: loginHint, scopes: scopes);
                 }
                 catch (FailureCallbackException) { }
             }
@@ -52,7 +52,7 @@ namespace Blazorade.Msal.Services
 
         public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint = null, IEnumerable<string> scopes = null)
         {
-            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Dialog)
+            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Popup)
             {
                 return await this.AcquireTokenPopupAsync(loginHint, scopes);
             }
