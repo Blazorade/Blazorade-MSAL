@@ -1,7 +1,77 @@
 ﻿@page "/"
+@inject BlazoradeMsalOptions appOptions
+@inject BlazoradeMsalService msalService
+
+@code {
+
+    AuthenticationResult token = null;
+    string scopeString = null;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender && null == this.token)
+        {
+            try
+            {
+                this.token = await this.msalService.AcquireTokenSilentAsync();
+                this.SetUIFromToken();
+            }
+            catch { }
+        }
+    }
+
+    private async Task LogoutAsync(MouseEventArgs e)
+    {
+        await this.msalService.LogoutAsync();
+    }
+
+    private async Task GetTokenAsync(MouseEventArgs e)
+    {
+        var scopes = (this.scopeString ?? "").Split(',');
+        this.token = await this.msalService.AcquireTokenAsync(scopes: scopes);
+        this.SetUIFromToken();
+    }
+
+    private void SetUIFromToken()
+    {
+        if (null != this.token)
+        {
+            this.scopeString = string.Join(',', this.token.Scopes);
+            this.StateHasChanged();
+        }
+    }
+}
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<p>
+    ClientId: @this.appOptions.ClientId
+</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<hr />
+
+<div class="input-group">
+    <input type="text" name="scopes" class="form-control" placeholder="Comma-separated list of tokens to acquire" @bind-value="this.scopeString" @bind-value:event="oninput" />
+    <div class="input-group-append">
+        <button type="button" class="btn btn-primary" @onclick="this.GetTokenAsync">Get Token</button>
+        <button type="button" class="btn btn-outline-secondary" @onclick="this.LogoutAsync">Log Out</button>
+    </div>
+</div>
+
+<hr />
+
+@if (null != this.token)
+{
+    <h2>Token for: @this.token.Account?.Name</h2>
+    <ul>
+        <li>Account Name: @this.token.Account?.Name</li>
+        <li>Account Username: @this.token.Account?.UserName</li>
+        <li>Authority: @this.token.Authority</li>
+        <li>Expires On: @this.token.ExpiresOn</li>
+        <li>Scopes: @string.Join(", ", this.token.Scopes?.ToArray() ?? new string[0])</li>
+        <li>Access Token: @this.token.AccessToken</li>
+        <li>Id Token: @this.token.IdToken</li>
+    </ul>
+}

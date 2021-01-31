@@ -1,3 +1,4 @@
+using Blazorade.Msal.Configuration;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +18,20 @@ namespace WasmTestApp
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services
+                .AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) })
+                .AddBlazoradeMsal((sp, o) =>
+                {
+                    var root = sp.GetService<IConfiguration>();
+                    var config = root.GetSection("app");
+                    o.ClientId = config.GetValue<string>("clientId");
+                    o.TenantId = config.GetValue<string>("tenantId");
+
+                    o.DefaultScopes = new string[] { "user.read" };
+                    o.LogoutUrl = "/loggedout";
+                    o.InteractiveLoginMode = InteractiveLoginMode.Dialog;
+                })
+                ;
 
             await builder.Build().RunAsync();
         }

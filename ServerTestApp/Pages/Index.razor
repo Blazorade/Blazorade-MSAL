@@ -37,7 +37,7 @@
 
     private void SetUIDataFromToken()
     {
-        if(null != this.token)
+        if (null != this.token)
         {
             this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
 
@@ -76,7 +76,16 @@ Welcome to your new app.
     </div>
 </div>
 
-@if(null != this.token)
+@if (null != this.token)
 {
-    <TokenViewer Token="token" />
+    <h2>Token for: @this.token.Account?.Name</h2>
+    <ul>
+        <li>Account Name: @this.token.Account?.Name</li>
+        <li>Account Username: @this.token.Account?.UserName</li>
+        <li>Authority: @this.token.Authority</li>
+        <li>Expires On: @this.token.ExpiresOn</li>
+        <li>Scopes: @string.Join(", ", this.token.Scopes?.ToArray() ?? new string[0])</li>
+        <li>Access Token: @this.token.AccessToken</li>
+        <li>Id Token: @this.token.IdToken</li>
+    </ul>
 }
