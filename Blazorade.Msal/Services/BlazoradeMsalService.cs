@@ -66,11 +66,27 @@ namespace Blazorade.Msal.Services
 
         public async Task<AuthenticationResult> AcquireTokenSilentAsync(string loginHint = null, IEnumerable<string> scopes = null)
         {
+            AuthenticationResult result = null;
             var module = await this.GetBlazoradeModuleAsync();
-            var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes);
 
-            var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenSilent", data);
-            return await handler.GetResultAsync();
+            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
+            {
+                try
+                {
+                    result = await this.HandleRedirectPromiseAsync();
+                }
+                catch { }
+            }
+
+            if(null == result)
+            {
+                var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes);
+
+                var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenSilent", data);
+                result = await handler.GetResultAsync();
+            }
+
+            return result;
         }
 
         public async Task<AuthenticationResult> HandleRedirectPromiseAsync()

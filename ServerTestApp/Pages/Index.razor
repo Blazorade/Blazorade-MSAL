@@ -11,6 +11,32 @@
     {
         IEnumerable<string> scopes = this.scopeString?.Length > 0 ? this.scopeString.Split(",", options: StringSplitOptions.RemoveEmptyEntries) : null;
         this.token = await msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
+        this.SetUIDataFromToken();
+    }
+
+    private async Task LogoutAsync(MouseEventArgs e)
+    {
+        await this.msalService.LogoutAsync();
+        this.StateHasChanged();
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            try
+            {
+                this.token = await this.msalService.AcquireTokenSilentAsync();
+                this.SetUIDataFromToken();
+            }
+            catch { }
+        }
+    }
+
+    private void SetUIDataFromToken()
+    {
         if(null != this.token)
         {
             this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
@@ -22,12 +48,6 @@
 
             this.StateHasChanged();
         }
-    }
-
-    private async Task LogoutAsync(MouseEventArgs e)
-    {
-        await this.msalService.LogoutAsync();
-        this.StateHasChanged();
     }
 }
 

@@ -37,7 +37,6 @@ namespace ServerTestApp
                     o.TenantId = config.GetValue<string>("tenantId");
 
                     o.DefaultScopes = new string[] { "openid", "profile" };
-                    o.RedirectUrl = "/login";
                     o.LogoutUrl = "/loggedout";
                     o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
                 })

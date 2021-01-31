@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Blazorade-Core\Blazorade.Core\Blazorade.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\" />
+  </ItemGroup>
+
 </Project>
