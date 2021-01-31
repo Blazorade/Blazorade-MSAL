@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Blazorade.Msal\Blazorade.Msal.csproj" />
+    <ProjectReference Include="..\SharedComponentsSample\SharedComponentsSample.csproj" />
   </ItemGroup>
 
 </Project>

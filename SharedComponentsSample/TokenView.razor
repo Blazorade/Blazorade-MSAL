@@ -1,12 +1,11 @@
-﻿@page "/"
-@inject BlazoradeMsalOptions appOptions
-@inject BlazoradeMsalService msalService
+﻿@inject BlazoradeMsalService msalService
 
 @code {
 
-    AuthenticationResult token = null;
-    string scopeString = null;
-    string loginHint = null;
+    private string scopeString = null;
+    private string loginHint = null;
+    private AuthenticationResult token = null;
+
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -23,16 +22,16 @@
         }
     }
 
-    private async Task LogoutAsync(MouseEventArgs e)
-    {
-        await this.msalService.LogoutAsync();
-    }
-
     private async Task GetTokenAsync(MouseEventArgs e)
     {
         var scopes = (this.scopeString ?? "").Split(',');
         this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
         this.SetUIFromToken();
+    }
+
+    private async Task LogoutAsync(MouseEventArgs e)
+    {
+        await this.msalService.LogoutAsync();
     }
 
     private void SetUIFromToken()
@@ -44,15 +43,8 @@
             this.StateHasChanged();
         }
     }
+
 }
-
-<h1>Hello, world!</h1>
-
-<p>
-    ClientId: @this.appOptions.ClientId
-</p>
-
-<hr />
 
 <div class="input-group">
     <input type="text" name="login-hint" class="form-control" placeholder="Type in a login hint" @bind-value="this.loginHint" @bind-value:event="oninput" />
@@ -62,8 +54,6 @@
         <button type="button" class="btn btn-outline-secondary" @onclick="this.LogoutAsync">Log Out</button>
     </div>
 </div>
-
-<hr />
 
 @if (null != this.token)
 {
