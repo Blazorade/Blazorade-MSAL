@@ -115,6 +115,7 @@ export function handleRedirectPromise(args) {
     }
     catch (err) {
         console.error("handleRedirectPromise", "Failure calling MSAL client", err);
+        invokeCallback(args.failureCallback, err);
     }
 }
 

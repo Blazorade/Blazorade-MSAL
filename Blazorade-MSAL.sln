@@ -23,11 +23,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MsalTestConsole", "MsalTest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{27D5BEFB-F2D9-4A84-A61F-E2ADA4F1B6E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerSample", "BlazorServerSample\BlazorServerSample.csproj", "{C104334F-D15A-4DB7-8A5C-CA5E704B92B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorServerSample", "BlazorServerSample\BlazorServerSample.csproj", "{C104334F-D15A-4DB7-8A5C-CA5E704B92B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWasmSample", "BlazorWasmSample\BlazorWasmSample.csproj", "{79286AAB-E3AF-4647-8EA6-B680DEE68DB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWasmSample", "BlazorWasmSample\BlazorWasmSample.csproj", "{79286AAB-E3AF-4647-8EA6-B680DEE68DB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedComponentsSample", "SharedComponentsSample\SharedComponentsSample.csproj", "{8616164C-935F-4118-848C-4592FDA21F9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedComponentsSample", "SharedComponentsSample\SharedComponentsSample.csproj", "{8616164C-935F-4118-848C-4592FDA21F9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

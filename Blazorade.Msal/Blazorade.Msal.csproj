@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="wwwroot\Blazorade-Icon-128.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
