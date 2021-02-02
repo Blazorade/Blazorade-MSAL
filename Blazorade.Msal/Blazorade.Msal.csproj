@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>1.0.0-preview3</Version>
+    <Version>1.0.0-preview4</Version>
     <Authors>Mika Berglund</Authors>
     <Company>Blazorade</Company>
     <Product>Blazorade MSAL</Product>
@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/Blazorade/Blazorade-MSAL</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Blazor, Blazor Server, Blazor WASM, MSAL, Authentication</PackageTags>
+    <PackageIcon>Blazorade-Icon-128.png</PackageIcon>
   </PropertyGroup>
 
   
@@ -26,6 +27,13 @@
 
   <ItemGroup>
     <Folder Include="Components\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Blazorade-Icon-128.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
