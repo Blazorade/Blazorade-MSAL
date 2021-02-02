@@ -1,0 +1,28 @@
+﻿@page "/login"
+@inject NavigationManager navMan;
+
+@code{
+    private Exception ex;
+    private void LoginSucceeded(AuthenticationResult token)
+    {
+        this.navMan.NavigateTo("/");
+    }
+
+    private void LoginFailed(Exception ex)
+    {
+        this.ex = ex;
+        this.StateHasChanged();
+    }
+}
+<h1>Login</h1> 
+<a href="/">Home</a>
+
+<LoginRedirectHandler 
+    OnLoginSucceeded="this.LoginSucceeded" 
+    OnLoginFailed="this.LoginFailed" 
+/>
+
+@if(null != this.ex)
+{
+    <pre>@this.ex.ToString()</pre>
+}
