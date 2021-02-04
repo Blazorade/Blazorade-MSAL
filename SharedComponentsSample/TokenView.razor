@@ -5,7 +5,7 @@
     private string scopeString = null;
     private string loginHint = null;
     private AuthenticationResult token = null;
-
+    private bool isLoading = false;
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -13,25 +13,46 @@
 
         if (firstRender)
         {
+            this.BeginLoading();
             try
             {
                 this.token = await this.msalService.AcquireTokenSilentAsync(fallbackToDefaultAccount: true);
                 this.SetUIFromToken();
             }
             catch { }
+            finally
+            {
+                this.EndLoading();
+            }
         }
     }
 
     private async Task GetTokenAsync(MouseEventArgs e)
     {
+        this.BeginLoading();
+
         var scopes = (this.scopeString ?? "").Split(',');
         this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
         this.SetUIFromToken();
+
+        this.EndLoading();
     }
 
     private async Task LogoutAsync(MouseEventArgs e)
     {
         await this.msalService.LogoutAsync();
+    }
+
+    private void BeginLoading()
+    {
+        this.isLoading = true;
+        this.StateHasChanged();
+    }
+
+    private void EndLoading()
+    {
+        this.isLoading = false;
+        this.StateHasChanged();
     }
 
     private void SetUIFromToken()
@@ -50,7 +71,13 @@
     <input type="text" name="login-hint" class="form-control" placeholder="Type in a login hint" @bind-value="this.loginHint" @bind-value:event="oninput" />
     <input type="text" name="scopes" class="form-control" placeholder="Comma-separated list of tokens to acquire" @bind-value="this.scopeString" @bind-value:event="oninput" />
     <div class="input-group-append">
-        <button type="button" class="btn btn-primary" @onclick="this.GetTokenAsync">Get Token</button>
+        <button type="button" class="btn btn-primary" @onclick="this.GetTokenAsync">
+            @if (this.isLoading)
+            {
+                <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+            }
+            <span>Get Token</span>
+        </button>
         <button type="button" class="btn btn-outline-secondary" @onclick="this.LogoutAsync">Log Out</button>
     </div>
 </div>
