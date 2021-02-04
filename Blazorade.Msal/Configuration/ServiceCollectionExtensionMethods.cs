@@ -8,18 +8,23 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods for working with a <see cref="IServiceCollection"/> implementation.
+    /// </summary>
     public static class ServiceCollectionExtensionMethods
     {
 
         public static IServiceCollection AddBlazoradeMsal(this IServiceCollection services)
         {
-
-            return services;
+            return services
+                .AddScoped<BlazoradeMsalService>()
+                ;
         }
 
         public static IServiceCollection AddBlazoradeMsal(this IServiceCollection services, Action<BlazoradeMsalOptions> config)
         {
             return services
+                .AddBlazoradeMsal()
                 .AddBlazoradeMsal((sp, o) =>
                 {
                     config?.Invoke(o);
@@ -29,7 +34,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddBlazoradeMsal(this IServiceCollection services, Action<IServiceProvider, BlazoradeMsalOptions> config)
         {
             return services
-                .AddScoped<BlazoradeMsalService>()
+                .AddBlazoradeMsal()
                 .AddSingleton((p) =>
                 {
                     var options = new BlazoradeMsalOptions();

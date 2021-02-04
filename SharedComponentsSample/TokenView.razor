@@ -68,8 +68,8 @@
 }
 
 <div class="input-group">
-    <input type="text" name="login-hint" class="form-control" placeholder="Type in a login hint" @bind-value="this.loginHint" @bind-value:event="oninput" />
-    <input type="text" name="scopes" class="form-control" placeholder="Comma-separated list of tokens to acquire" @bind-value="this.scopeString" @bind-value:event="oninput" />
+    <input type="text" name="login-hint" class="form-control" placeholder="Optional. Type in a login hint." @bind-value="this.loginHint" @bind-value:event="oninput" />
+    <input type="text" name="scopes" class="form-control" placeholder="Optional. Comma-separated list of tokens to acquire." @bind-value="this.scopeString" @bind-value:event="oninput" />
     <div class="input-group-append">
         <button type="button" class="btn btn-primary" @onclick="this.GetTokenAsync">
             @if (this.isLoading)
