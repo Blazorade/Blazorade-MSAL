@@ -40,6 +40,7 @@ namespace BlazorServerSample
                     o.PostLogoutUrl = "/loggedout";
                     o.RedirectUrl = "/login";
                     o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
+                    o.TokenCacheScope = TokenCacheScope.Persistent;
                 })
                 ;
         }

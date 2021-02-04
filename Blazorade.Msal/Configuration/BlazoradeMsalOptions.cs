@@ -20,6 +20,7 @@ namespace Blazorade.Msal.Configuration
             this.MsalVersion = "2.11.0";
             this.InteractiveLoginMode = InteractiveLoginMode.Redirect;
             this.DefaultScopes = new string[] { "openid", "profile" };
+            this.TokenCacheScope = TokenCacheScope.Session;
         }
 
 
@@ -57,6 +58,9 @@ namespace Blazorade.Msal.Configuration
         /// <summary>
         /// The default scopes to acquire if none are specified when acquiring tokens.
         /// </summary>
+        /// <remarks>
+        /// Defaults to an array with <c>openid</c> and <c>profile</c>.
+        /// </remarks>
         public IEnumerable<string> DefaultScopes { get; set; }
 
         /// <summary>
@@ -82,6 +86,14 @@ namespace Blazorade.Msal.Configuration
         /// </para>
         /// </remarks>
         public string PostLogoutUrl { get; set; }
+
+        /// <summary>
+        /// Defines how tokens are cached.
+        /// </summary>
+        /// <remarks>
+        /// Defaults to <see cref="TokenCacheScope.Session"/>.
+        /// </remarks>
+        public TokenCacheScope TokenCacheScope { get; set; }
 
     }
 }
