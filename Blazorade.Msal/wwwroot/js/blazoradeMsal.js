@@ -9,7 +9,7 @@ export function acquireTokenSilent(args) {
 
     if (!account) {
         console.warn("acquireTokenSilent", "loginHint did not find an account. Tokens can most likely not be acquired without a found account.");
-        if (args.data.fallbackToDefaultAccount) {
+        if (args.data.fallbackToDefaultLoginHint) {
             account = getDefaultAccount(args, msalClient);
         }
     }
@@ -188,10 +188,10 @@ function invokeCallback(callback, ...args) {
 }
 
 function setDefaultLoginHint(args, authResult) {
-    console.debug("setDefaultAccount", args, authResult);
+    console.debug("setDefaultLoginHint", args, authResult);
 
     if (authResult && authResult.account && authResult.account.username) {
-        console.debug("setDefaultAccount", authResult.account.username);
+        console.debug("setDefaultLoginHint", authResult.account.username);
 
         let key = `${args.data.msalConfig.auth.clientId}.blazorade-default-loginHint`;
         window.localStorage.setItem(key, authResult.account.username);
@@ -204,8 +204,5 @@ function setMsalConfigDefault(msalConfig) {
 
     msalConfig.auth = msalConfig.auth ?? {};
     msalConfig.auth.redirectUri = msalConfig.auth.redirectUri ?? window.location.origin;
-    msalConfig.cache = {
-        cacheLocation: "localStorage"
-    };
 }
 

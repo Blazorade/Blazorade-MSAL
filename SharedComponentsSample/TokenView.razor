@@ -16,7 +16,7 @@
             this.BeginLoading();
             try
             {
-                this.token = await this.msalService.AcquireTokenSilentAsync(fallbackToDefaultAccount: true);
+                this.token = await this.msalService.AcquireTokenSilentAsync(fallbackToDefaultLoginHint: true);
                 this.SetUIFromToken();
             }
             catch { }
