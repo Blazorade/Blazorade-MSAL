@@ -143,7 +143,26 @@ namespace Blazorade.Msal.Services
             if(null == result)
             {
                 var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes, fallbackToDefaultLoginHint: fallbackToDefaultLoginHint);
-                var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenSilent", data);
+                using(var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenSilent", data))
+                {
+                    result = await handler.GetResultAsync();
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the default login hint for the current user. The default login hint is the login hint that was previously used to acquire a token.
+        /// </summary>
+        public async Task<string> GetDefaultLoginHintAsync()
+        {
+            var module = await this.GetBlazoradeModuleAsync();
+            var data = this.CreateMsalData();
+
+            string result = null;
+            using (var handler = new DotNetInstanceCallbackHandler<string>(module, "getDefaultLoginHint", data))
+            {
                 result = await handler.GetResultAsync();
             }
 
@@ -163,8 +182,11 @@ namespace Blazorade.Msal.Services
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData(navigateToLoginRequestUrl: false);
 
-            var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "handleRedirectPromise", data);
-            var result = await handler.GetResultAsync();
+            AuthenticationResult result = null;
+            using (var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "handleRedirectPromise", data))
+            {
+                result = await handler.GetResultAsync();
+            }
             return result;
         }
 
@@ -176,8 +198,10 @@ namespace Blazorade.Msal.Services
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData();
 
-            var handler = new DotNetInstanceCallbackHandler(module, "logout", data);
-            await handler.GetResultAsync();
+            using (var handler = new DotNetInstanceCallbackHandler(module, "logout", data))
+            {
+                await handler.GetResultAsync();
+            }
         }
 
 
@@ -190,8 +214,12 @@ namespace Blazorade.Msal.Services
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes);
 
-            var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenPopup", data);
-            return await handler.GetResultAsync();
+            AuthenticationResult result = null;
+            using (var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenPopup", data))
+            {
+                result = await handler.GetResultAsync();
+            }
+            return result;
         }
 
         /// <summary>
@@ -202,8 +230,10 @@ namespace Blazorade.Msal.Services
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes);
 
-            var handler = new DotNetInstanceCallbackHandler(module, "acquireTokenRedirect", data);
-            await handler.GetResultAsync();
+            using (var handler = new DotNetInstanceCallbackHandler(module, "acquireTokenRedirect", data))
+            {
+                await handler.GetResultAsync();
+            }
         }
 
 

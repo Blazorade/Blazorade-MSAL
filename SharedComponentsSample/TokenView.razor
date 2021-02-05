@@ -17,11 +17,11 @@
             try
             {
                 this.token = await this.msalService.AcquireTokenSilentAsync(fallbackToDefaultLoginHint: true);
-                this.SetUIFromToken();
             }
             catch { }
             finally
             {
+                await this.SetUIFromTokenAsync();
                 this.EndLoading();
             }
         }
@@ -33,7 +33,7 @@
 
         var scopes = (this.scopeString ?? "").Split(',');
         this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
-        this.SetUIFromToken();
+        await this.SetUIFromTokenAsync();
 
         this.EndLoading();
     }
@@ -55,14 +55,18 @@
         this.StateHasChanged();
     }
 
-    private void SetUIFromToken()
+    private async Task SetUIFromTokenAsync()
     {
         if (null != this.token)
         {
             this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
             this.scopeString = string.Join(',', this.token.Scopes);
-            this.StateHasChanged();
         }
+        else
+        {
+            this.loginHint = await this.msalService.GetDefaultLoginHintAsync();
+        }
+        this.StateHasChanged();
     }
 
 }

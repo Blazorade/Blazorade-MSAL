@@ -95,6 +95,18 @@ export function acquireTokenRedirect(args) {
     }
 }
 
+export function getDefaultLoginHint(args) {
+    console.debug("getDefaultLoginHint", args);
+
+    try {
+        let loginHint = getDefaultLoginHintInternal(args);
+        invokeCallback(args.successCallback, loginHint);
+    }
+    catch (err) {
+        invokeCallback(args.failureCallback, err);
+    }
+}
+
 export function handleRedirectPromise(args) {
     console.debug("handleRedirectPromise", args);
 
@@ -122,6 +134,8 @@ export function handleRedirectPromise(args) {
 export function logout(args) {
     console.debug("logout", args);
 
+    clearDefaultLoginHint(args);
+
     let msalClient = createMsalClient(args);
     let request = {};
     let logoutUrl = getLogoutUrl(args);
@@ -135,6 +149,17 @@ export function logout(args) {
 }
 
 
+
+function clearDefaultLoginHint(args) {
+    console.debug("clearDefaultLoginHint", args);
+    let key = createDefaultLoginHintKey(args);
+    window.localStorage.removeItem(key);
+}
+
+function createDefaultLoginHintKey(args) {
+    return `${args.data.msalConfig.auth.clientId}.blazorade-default-loginHint`;
+}
+
 function createMsalClient(args) {
     console.debug("createMsalClient", args);
     setMsalConfigDefault(args.data.msalConfig);
@@ -146,8 +171,10 @@ function createMsalClient(args) {
 }
 
 function getDefaultAccount(args, msalClient) {
+    console.debug("getDefaultAccount", args, msalClient);
+
     let account;
-    let loginHint = getDefaultLoginHint(args);
+    let loginHint = getDefaultLoginHintInternal(args);
     console.debug("getDefaultAccount", "Default login hint", loginHint);
 
     if (loginHint) {
@@ -158,14 +185,15 @@ function getDefaultAccount(args, msalClient) {
     return account;
 }
 
-function getDefaultLoginHint(args) {
-    console.debug("getDefaultLoginHint", args);
+function getDefaultLoginHintInternal(args) {
+    console.debug("getDefaultLoginHintInternal", args);
 
-    let key = `${args.data.msalConfig.auth.clientId}.blazorade-default-loginHint`;
-    console.debug("getDefaultLoginHint", "key", key);
+    let key = createDefaultLoginHintKey(args);
+    console.debug("getDefaultLoginHintInternal", "key", key);
 
     let loginHint = window.localStorage.getItem(key);
-    console.log("getDefaultLoginHint", "loginHint", loginHint);
+    console.debug("getDefaultLoginHintInternal", "loginHint", loginHint);
+
     return loginHint;
 }
 
@@ -193,7 +221,7 @@ function setDefaultLoginHint(args, authResult) {
     if (authResult && authResult.account && authResult.account.username) {
         console.debug("setDefaultLoginHint", authResult.account.username);
 
-        let key = `${args.data.msalConfig.auth.clientId}.blazorade-default-loginHint`;
+        let key = createDefaultLoginHintKey(args);
         window.localStorage.setItem(key, authResult.account.username);
         console.debug("key", key);
     }

@@ -39,7 +39,7 @@ namespace BlazorServerSample
                     o.DefaultScopes = new string[] { "openid", "profile" };
                     o.PostLogoutUrl = "/loggedout";
                     o.RedirectUrl = "/login";
-                    o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
+                    o.InteractiveLoginMode = InteractiveLoginMode.Popup;
                     o.TokenCacheScope = TokenCacheScope.Persistent;
                 })
                 ;
