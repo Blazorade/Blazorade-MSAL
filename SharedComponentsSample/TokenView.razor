@@ -6,6 +6,7 @@
     private string loginHint = null;
     private AuthenticationResult token = null;
     private bool isLoading = false;
+    private List<Exception> errors = new List<Exception>();
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -31,8 +32,16 @@
     {
         this.BeginLoading();
 
-        var scopes = (this.scopeString ?? "").Split(',');
-        this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
+        try
+        {
+            var scopes = (this.scopeString ?? "").Split(',');
+            this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
+        }
+        catch (Exception ex)
+        {
+            this.errors.Add(ex);
+        }
+
         await this.SetUIFromTokenAsync();
 
         this.EndLoading();
@@ -57,16 +66,22 @@
 
     private async Task SetUIFromTokenAsync()
     {
-        if (null != this.token)
+        try
         {
-            this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
-            this.scopeString = string.Join(',', this.token.Scopes);
+            if (null != this.token)
+            {
+                this.loginHint = this.token.IdTokenClaims["preferred_username"]?.ToString();
+                this.scopeString = string.Join(',', this.token.Scopes);
+            }
+            else
+            {
+                this.loginHint = await this.msalService.GetDefaultLoginHintAsync();
+            }
         }
-        else
+        catch (Exception ex)
         {
-            this.loginHint = await this.msalService.GetDefaultLoginHintAsync();
+            this.errors.Add(ex);
         }
-        this.StateHasChanged();
     }
 
 }
@@ -98,4 +113,15 @@
         <li>Access Token: @this.token.AccessToken</li>
         <li>Id Token: @this.token.IdToken</li>
     </ul>
+}
+
+@if (this.errors.Count > 0)
+{
+    <h3>Errors</h3>
+
+    @foreach (var ex in this.errors)
+    {
+        <pre>@ex.ToString()</pre>
+        <hr />
+    }
 }
