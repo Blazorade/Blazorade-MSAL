@@ -230,7 +230,6 @@ function setDefaultLoginHint(args, authResult) {
 function setMsalConfigDefault(msalConfig) {
     console.debug("setMsalConfigDefault", msalConfig);
 
-    msalConfig.auth = msalConfig.auth ?? {};
-    msalConfig.auth.redirectUri = msalConfig.auth.redirectUri ?? window.location.origin;
+    msalConfig.auth = msalConfig.auth ? msalConfig.auth : {};
+    msalConfig.auth.redirectUri = msalConfig.auth.redirectUri ? msalConfig.auth.redirectUri : window.location.origin;
 }
-
