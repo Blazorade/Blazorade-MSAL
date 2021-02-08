@@ -30,12 +30,17 @@
 
     private async Task GetTokenAsync(MouseEventArgs e)
     {
+        await this.GetTokenAsync();
+    }
+
+    private async Task GetTokenAsync(LoginPrompt? prompt = null)
+    {
         this.BeginLoading();
 
         try
         {
             var scopes = (this.scopeString ?? "").Split(',');
-            this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes);
+            this.token = await this.msalService.AcquireTokenAsync(loginHint: this.loginHint, scopes: scopes, prompt: prompt);
         }
         catch (Exception ex)
         {
@@ -97,6 +102,14 @@
             }
             <span>Get Token</span>
         </button>
+        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item" type="button" @onclick="async (e) => await this.GetTokenAsync(LoginPrompt.Login)">Prompt Login</button>
+            <button class="dropdown-item" type="button" @onclick="async (e) => await this.GetTokenAsync(LoginPrompt.Consent)">Prompt Consent</button>
+            <button class="dropdown-item" type="button" @onclick="async (e) => await this.GetTokenAsync(LoginPrompt.SelectAccount)">Prompt Select Account</button>
+            <button class="dropdown-item" type="button" @onclick="async (e) => await this.GetTokenAsync(LoginPrompt.None)">Prompt None</button>
+        </div>
         <button type="button" class="btn btn-outline-secondary" @onclick="this.LogoutAsync">Log Out</button>
     </div>
 </div>

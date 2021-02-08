@@ -51,6 +51,7 @@ export function acquireTokenPopup(args) {
         authority: args.data.msalConfig.auth.authority,
         loginHint: args.data.loginHint
     };
+    if (args.data.prompt) request["prompt"] = args.data.prompt;
     console.debug("acquireTokenPopup", "request", request);
 
     try {
@@ -83,6 +84,7 @@ export function acquireTokenRedirect(args) {
         loginHint: args.data.loginHint,
         redirectUri: args.data.msalConfig.auth.redirectUri
     };
+    if (args.data.prompt) request["prompt"] = args.data.prompt;
     console.debug("acquireTokenRedirect", "request", request);
 
     try {

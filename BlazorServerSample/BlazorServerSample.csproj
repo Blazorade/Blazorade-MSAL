@@ -9,4 +9,8 @@
     <ProjectReference Include="..\SharedComponentsSample\SharedComponentsSample.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
 </Project>

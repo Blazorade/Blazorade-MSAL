@@ -58,22 +58,30 @@ namespace Blazorade.Msal.Services
         /// Specifies whether to fall back to the default login hint. The default login hint is the login hint that was previously used to
         /// acquire a token.
         /// </param>
-        public async Task<AuthenticationResult> AcquireTokenAsync(string loginHint = null, IEnumerable<string> scopes = null, bool fallbackToDefaultLoginHint = false)
+        /// <param name="prompt">
+        /// Defines a prompt behaviour, in case this method falls back to interactive login.
+        /// </param>
+        public async Task<AuthenticationResult> AcquireTokenAsync(string loginHint = null, IEnumerable<string> scopes = null, bool fallbackToDefaultLoginHint = false, LoginPrompt? prompt = null)
         {
             AuthenticationResult result = null;
-            try
+
+            // If prompt is specified, and it is something else than None, then we must skip the silent acquisition.
+
+            if(!prompt.HasValue || prompt == LoginPrompt.None)
             {
-                result = await this.AcquireTokenSilentAsync(loginHint: loginHint, scopes: scopes, fallbackToDefaultLoginHint: fallbackToDefaultLoginHint);
+                try
+                {
+                    result = await this.AcquireTokenSilentAsync(loginHint: loginHint, scopes: scopes, fallbackToDefaultLoginHint: fallbackToDefaultLoginHint);
+                }
+                // Deliberately just swallowing any error, since if we cannot get a token this way, then we use another fallback method.
+                catch (FailureCallbackException) { }
             }
-            // Deliberately just swallowing any error, since if we cannot get a token this way, then we use another fallback method.
-            catch (FailureCallbackException) { }
-            
 
             if (null == result)
             {
                 try
                 {
-                    result = await this.AcquireTokenInteractiveAsync(loginHint: loginHint, scopes: scopes);
+                    result = await this.AcquireTokenInteractiveAsync(loginHint: loginHint, scopes: scopes, prompt: prompt);
                 }
                 catch (FailureCallbackException) { }
             }
@@ -89,16 +97,16 @@ namespace Blazorade.Msal.Services
         /// <param name="scopes">
         /// The scopes that must be included in the acquired token. If not specified, the default configured scopes will be used.
         /// </param>
-        /// <returns></returns>
-        public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint = null, IEnumerable<string> scopes = null)
+        /// <param name="prompt">The prompt behaviour to use. If not specified, no specific prompt behaviour is used. It will be determined by what is needed.</param>
+        public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint = null, IEnumerable<string> scopes = null, LoginPrompt? prompt = null)
         {
             if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Popup)
             {
-                return await this.AcquireTokenPopupAsync(loginHint, scopes);
+                return await this.AcquireTokenPopupAsync(loginHint: loginHint, scopes: scopes, prompt: prompt);
             }
             else if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
             {
-                await this.AcquireTokenRedirectAsync(loginHint, scopes);
+                await this.AcquireTokenRedirectAsync(loginHint: loginHint, scopes: scopes, prompt: prompt);
             }
 
             return null;
@@ -209,10 +217,18 @@ namespace Blazorade.Msal.Services
         /// <summary>
         /// Acquires a token with a popup dialog.
         /// </summary>
-        protected async Task<AuthenticationResult> AcquireTokenPopupAsync(string loginHint = null, IEnumerable<string> scopes = null)
+        /// <param name="loginHint">A login hint to use, i.e. the username, if known.</param>
+        /// <param name="scopes">
+        /// The scopes that must be included in the acquired token. If not specified, the default configured scopes will be used.
+        /// </param>
+        /// <param name="prompt">The prompt behaviour to use. If not specified, no specific prompt behaviour is used. It will be determined by what is needed.</param>
+        /// <remarks>
+        /// It is recommended to use the <see cref="AcquireTokenInteractiveAsync"/> method, which will determine the interaction mode from the application's configuration.
+        /// </remarks>
+        protected async Task<AuthenticationResult> AcquireTokenPopupAsync(string loginHint = null, IEnumerable<string> scopes = null, LoginPrompt? prompt = null)
         {
             var module = await this.GetBlazoradeModuleAsync();
-            var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes);
+            var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes, prompt: prompt);
 
             AuthenticationResult result = null;
             using (var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenPopup", data))
@@ -225,10 +241,18 @@ namespace Blazorade.Msal.Services
         /// <summary>
         /// Acquires a token by redirecting the user to the identity provider.
         /// </summary>
-        protected async Task AcquireTokenRedirectAsync(string loginHint = null, IEnumerable<string> scopes = null)
+        /// <param name="loginHint">A login hint to use, i.e. the username, if known.</param>
+        /// <param name="scopes">
+        /// The scopes that must be included in the acquired token. If not specified, the default configured scopes will be used.
+        /// </param>
+        /// <param name="prompt">The prompt behaviour to use. If not specified, no specific prompt behaviour is used. It will be determined by what is needed.</param>
+        /// <remarks>
+        /// It is recommended to use the <see cref="AcquireTokenInteractiveAsync"/> method, which will determine the interaction mode from the application's configuration.
+        /// </remarks>
+        protected async Task AcquireTokenRedirectAsync(string loginHint = null, IEnumerable<string> scopes = null, LoginPrompt? prompt = null)
         {
             var module = await this.GetBlazoradeModuleAsync();
-            var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes);
+            var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes, prompt: prompt);
 
             using (var handler = new DotNetInstanceCallbackHandler(module, "acquireTokenRedirect", data))
             {
@@ -285,7 +309,7 @@ namespace Blazorade.Msal.Services
             return msalConfig;
         }
 
-        private Dictionary<string, object> CreateMsalData(string loginHint = null, IEnumerable<string> scopes = null, bool navigateToLoginRequestUrl = true, bool fallbackToDefaultLoginHint = false)
+        private Dictionary<string, object> CreateMsalData(string loginHint = null, IEnumerable<string> scopes = null, bool navigateToLoginRequestUrl = true, bool fallbackToDefaultLoginHint = false, LoginPrompt? prompt = null)
         {
             var msalConfig = this.CreateMsalConfig(navigateToLoginRequestUrl);
 
@@ -305,6 +329,10 @@ namespace Blazorade.Msal.Services
                 data["fallbackToDefaultLoginHint"] = true;
             }
 
+            if (prompt.HasValue)
+            {
+                data["prompt"] = prompt.ToStringValue();
+            }
             return data;
         }
 
