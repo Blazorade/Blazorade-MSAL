@@ -37,7 +37,7 @@ namespace Blazorade.Msal.Services
         private IJSRuntime JSRuntime;
         private NavigationManager NavMan;
 
-
+        private const int DefaultTimeout = 5000;
 
         /// <summary>
         /// Acquires a token with the given parameters.
@@ -63,15 +63,34 @@ namespace Blazorade.Msal.Services
         /// </param>
         public async Task<AuthenticationResult> AcquireTokenAsync(string loginHint = null, IEnumerable<string> scopes = null, bool fallbackToDefaultLoginHint = false, LoginPrompt? prompt = null)
         {
+            return await this.AcquireTokenAsync(new TokenAcquisitionRequest
+            {
+                LoginHint = loginHint,
+                Scopes = scopes,
+                FallbackToDefaultLoginHint = fallbackToDefaultLoginHint,
+                Prompt = prompt
+            });
+        }
+
+        /// <summary>
+        /// Acquires a token with the given parameters.
+        /// </summary>
+        /// <remarks>
+        /// This method first tries to acquire the token silently using the <see cref="AcquireTokenSilentAsync"/> method.
+        /// If that failes, then the interactive option is used using the <see cref="AcquireTokenInteractiveAsync"/> method.
+        /// </remarks>
+        /// <param name="request">Defines how to request for a token.</param>
+        public async Task<AuthenticationResult> AcquireTokenAsync(TokenAcquisitionRequest request)
+        {
             AuthenticationResult result = null;
 
             // If prompt is specified, and it is something else than None, then we must skip the silent acquisition.
 
-            if(!prompt.HasValue || prompt == LoginPrompt.None)
+            if (!request.Prompt.HasValue || request.Prompt == LoginPrompt.None)
             {
                 try
                 {
-                    result = await this.AcquireTokenSilentAsync(loginHint: loginHint, scopes: scopes, fallbackToDefaultLoginHint: fallbackToDefaultLoginHint);
+                    result = await this.AcquireTokenSilentAsync(request);
                 }
                 // Deliberately just swallowing any error, since if we cannot get a token this way, then we use another fallback method.
                 catch (FailureCallbackException) { }
@@ -81,7 +100,7 @@ namespace Blazorade.Msal.Services
             {
                 try
                 {
-                    result = await this.AcquireTokenInteractiveAsync(loginHint: loginHint, scopes: scopes, prompt: prompt);
+                    result = await this.AcquireTokenInteractiveAsync(request);
                 }
                 catch (FailureCallbackException) { }
             }
@@ -100,13 +119,28 @@ namespace Blazorade.Msal.Services
         /// <param name="prompt">The prompt behaviour to use. If not specified, no specific prompt behaviour is used. It will be determined by what is needed.</param>
         public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(string loginHint = null, IEnumerable<string> scopes = null, LoginPrompt? prompt = null)
         {
-            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Popup)
+            return await this.AcquireTokenInteractiveAsync(new TokenAcquisitionRequest
             {
-                return await this.AcquireTokenPopupAsync(loginHint: loginHint, scopes: scopes, prompt: prompt);
+                LoginHint = loginHint,
+                Scopes = scopes,
+                Prompt = prompt
+            });
+        }
+
+        /// <summary>
+        /// Acquires a token interactively asking the user for input. Depending on your application's configuration, the token is acquired either using
+        /// a popup dialog, or by redirecting the user to the login.
+        /// </summary>
+        /// <param name="request">Defines how to request for a token.</param>
+        public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(TokenAcquisitionRequest request)
+        {
+            if (this.Options.InteractiveLoginMode == InteractiveLoginMode.Popup)
+            {
+                return await this.AcquireTokenPopupAsync(request);
             }
-            else if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
+            else if (this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
             {
-                await this.AcquireTokenRedirectAsync(loginHint: loginHint, scopes: scopes, prompt: prompt);
+                await this.AcquireTokenRedirectAsync(request);
             }
 
             return null;
@@ -125,13 +159,29 @@ namespace Blazorade.Msal.Services
         /// </remarks>
         public async Task<AuthenticationResult> AcquireTokenPopupAsync(string loginHint = null, IEnumerable<string> scopes = null, LoginPrompt? prompt = null)
         {
+            return await this.AcquireTokenPopupAsync(new TokenAcquisitionRequest
+            {
+                LoginHint = loginHint,
+                Scopes = scopes,
+                Prompt = prompt
+            });
+        }
+
+        /// <summary>
+        /// Acquires a token with a popup dialog.
+        /// </summary>
+        /// <param name="request">Defines how to request for a token.</param>
+        public async Task<AuthenticationResult> AcquireTokenPopupAsync(TokenAcquisitionRequest request)
+        {
+            if (null == request) throw new ArgumentNullException(nameof(request));
+
             var module = await this.GetBlazoradeModuleAsync();
-            var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes, prompt: prompt);
+            var data = this.CreateMsalData(loginHint: request?.LoginHint, scopes: request?.Scopes, prompt: request?.Prompt);
 
             AuthenticationResult result = null;
             using (var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenPopup", data))
             {
-                result = await handler.GetResultAsync();
+                result = await handler.GetResultAsync(timeout: request.Timeout ?? DefaultTimeout);
             }
             return result;
         }
@@ -155,12 +205,26 @@ namespace Blazorade.Msal.Services
         /// </remarks>
         public async Task AcquireTokenRedirectAsync(string loginHint = null, IEnumerable<string> scopes = null, LoginPrompt? prompt = null)
         {
+            await this.AcquireTokenRedirectAsync(new TokenAcquisitionRequest
+            {
+                LoginHint = loginHint,
+                Scopes = scopes,
+                Prompt = prompt
+            });
+        }
+
+        /// <summary>
+        /// Acquires a token by redirecting the user to the identity provider.
+        /// </summary>
+        /// <param name="request">Defines how to request for a token.</param>
+        public async Task AcquireTokenRedirectAsync(TokenAcquisitionRequest request)
+        {
             var module = await this.GetBlazoradeModuleAsync();
-            var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes, prompt: prompt);
+            var data = this.CreateMsalData(loginHint: request?.LoginHint, scopes: request?.Scopes, prompt: request?.Prompt);
 
             using (var handler = new DotNetInstanceCallbackHandler(module, "acquireTokenRedirect", data))
             {
-                await handler.GetResultAsync();
+                await handler.GetResultAsync(timeout: request.Timeout ?? DefaultTimeout);
             }
         }
 
@@ -188,10 +252,24 @@ namespace Blazorade.Msal.Services
         /// </param>
         public async Task<AuthenticationResult> AcquireTokenSilentAsync(string loginHint = null, IEnumerable<string> scopes = null, bool fallbackToDefaultLoginHint = false)
         {
+            return await this.AcquireTokenSilentAsync(new TokenAcquisitionRequest
+            {
+                LoginHint = loginHint,
+                Scopes = scopes,
+                FallbackToDefaultLoginHint = fallbackToDefaultLoginHint
+            });
+        }
+
+        /// <summary>
+        /// Acquires a token silently without user interaction.
+        /// </summary>
+        /// <param name="request">Defines how to request for a token.</param>
+        public async Task<AuthenticationResult> AcquireTokenSilentAsync(TokenAcquisitionRequest request)
+        {
             AuthenticationResult result = null;
             var module = await this.GetBlazoradeModuleAsync();
 
-            if(this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
+            if (this.Options.InteractiveLoginMode == InteractiveLoginMode.Redirect)
             {
                 try
                 {
@@ -200,12 +278,12 @@ namespace Blazorade.Msal.Services
                 catch { }
             }
 
-            if(null == result)
+            if (null == result)
             {
-                var data = this.CreateMsalData(loginHint: loginHint, scopes: scopes, fallbackToDefaultLoginHint: fallbackToDefaultLoginHint);
-                using(var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenSilent", data))
+                var data = this.CreateMsalData(loginHint: request?.LoginHint, scopes: request?.Scopes, fallbackToDefaultLoginHint: request?.FallbackToDefaultLoginHint);
+                using (var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenSilent", data))
                 {
-                    result = await handler.GetResultAsync();
+                    result = await handler.GetResultAsync(timeout: request.Timeout ?? DefaultTimeout);
                 }
             }
 
@@ -317,7 +395,7 @@ namespace Blazorade.Msal.Services
             return msalConfig;
         }
 
-        private Dictionary<string, object> CreateMsalData(string loginHint = null, IEnumerable<string> scopes = null, bool navigateToLoginRequestUrl = true, bool fallbackToDefaultLoginHint = false, LoginPrompt? prompt = null)
+        private Dictionary<string, object> CreateMsalData(string loginHint = null, IEnumerable<string> scopes = null, bool navigateToLoginRequestUrl = true, bool? fallbackToDefaultLoginHint = null, LoginPrompt? prompt = null)
         {
             var msalConfig = this.CreateMsalConfig(navigateToLoginRequestUrl);
 
@@ -332,7 +410,7 @@ namespace Blazorade.Msal.Services
                 data["loginHint"] = loginHint;
             }
 
-            if (fallbackToDefaultLoginHint)
+            if (fallbackToDefaultLoginHint.GetValueOrDefault())
             {
                 data["fallbackToDefaultLoginHint"] = true;
             }
