@@ -147,7 +147,13 @@ export function logout(args) {
 
     console.debug("logout", "request", request);
 
-    msalClient.logout(request);
+    try {
+        msalClient.logout(request);
+        invokeCallback(args.successCallback);
+    }
+    catch (err) {
+        invokeCallback(args.failureCallback, err);
+    }
 }
 
 

@@ -38,6 +38,7 @@ namespace Blazorade.Msal.Services
         private NavigationManager NavMan;
 
         private const int DefaultTimeout = 5000;
+        private const int DefaultInteractiveTimeout = 60000;
 
         /// <summary>
         /// Acquires a token with the given parameters.
@@ -181,7 +182,7 @@ namespace Blazorade.Msal.Services
             AuthenticationResult result = null;
             using (var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "acquireTokenPopup", data))
             {
-                result = await handler.GetResultAsync(timeout: request.Timeout ?? DefaultTimeout);
+                result = await handler.GetResultAsync(timeout: request.Timeout ?? DefaultInteractiveTimeout);
             }
             return result;
         }
@@ -224,7 +225,7 @@ namespace Blazorade.Msal.Services
 
             using (var handler = new DotNetInstanceCallbackHandler(module, "acquireTokenRedirect", data))
             {
-                await handler.GetResultAsync(timeout: request.Timeout ?? DefaultTimeout);
+                await handler.GetResultAsync(timeout: request.Timeout ?? DefaultInteractiveTimeout);
             }
         }
 
@@ -301,7 +302,7 @@ namespace Blazorade.Msal.Services
             string result = null;
             using (var handler = new DotNetInstanceCallbackHandler<string>(module, "getDefaultLoginHint", data))
             {
-                result = await handler.GetResultAsync();
+                result = await handler.GetResultAsync(timeout: DefaultTimeout);
             }
 
             return result;
@@ -323,7 +324,7 @@ namespace Blazorade.Msal.Services
             AuthenticationResult result = null;
             using (var handler = new DotNetInstanceCallbackHandler<AuthenticationResult>(module, "handleRedirectPromise", data))
             {
-                result = await handler.GetResultAsync();
+                result = await handler.GetResultAsync(timeout: DefaultTimeout);
             }
             return result;
         }
@@ -338,7 +339,7 @@ namespace Blazorade.Msal.Services
 
             using (var handler = new DotNetInstanceCallbackHandler(module, "logout", data))
             {
-                await handler.GetResultAsync();
+                await handler.GetResultAsync(timeout: DefaultTimeout);
             }
         }
 
@@ -449,5 +450,6 @@ namespace Blazorade.Msal.Services
         {
             return _MsalModule ??= await this.JSRuntime.InvokeAsync<IJSObjectReference>("import", $"https://alcdn.msftauth.net/browser/{this.Options.MsalVersion}/js/msal-browser.min.js").AsTask();
         }
+
     }
 }

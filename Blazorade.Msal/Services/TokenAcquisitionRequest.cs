@@ -20,7 +20,6 @@ namespace Blazorade.Msal.Services
         /// </summary>
         public TokenAcquisitionRequest()
         {
-            this.Timeout = 5000;
         }
 
 
@@ -37,7 +36,8 @@ namespace Blazorade.Msal.Services
         /// The number of milliseconds to specify as timeout for token acquisition calls.
         /// </summary>
         /// <remarks>
-        /// Defaults to 5000 ms.
+        /// If the timeout is <c>null</c>, a default value will be determined based on the type of token request. The timeout
+        /// for interactive token requests is always longer than for silent requests.
         /// </remarks>
         public int? Timeout { get; set; }
 
