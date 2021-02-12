@@ -102,6 +102,7 @@ export function getDefaultLoginHint(args) {
 
     try {
         let loginHint = getDefaultLoginHintInternal(args);
+        console.debug("getDefaultLoginHint", "loginHint", loginHint);
         invokeCallback(args.successCallback, loginHint);
     }
     catch (err) {
