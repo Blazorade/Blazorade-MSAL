@@ -13,6 +13,7 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Blazor, Blazor Server, Blazor WASM, MSAL, Authentication</PackageTags>
     <PackageIcon>Blazorade-Icon-128.png</PackageIcon>
+    <PackageReleaseNotes>https://github.com/Blazorade/Blazorade-MSAL/releases/tag/v1.1.0</PackageReleaseNotes>
   </PropertyGroup>
 
   
