@@ -123,8 +123,8 @@
         <li>Authority: @this.token.Authority</li>
         <li>Expires On: @this.token.ExpiresOn</li>
         <li>Scopes: @string.Join(", ", this.token.Scopes?.ToArray() ?? new string[0])</li>
-        <li>Access Token: @this.token.AccessToken</li>
-        <li>Id Token: @this.token.IdToken</li>
+        <li>Access Token: @this.token.AccessToken?.Length chars [<a href="https://jwt.ms/#access_token=@this.token.AccessToken" target="access-token">view</a>]</li>
+        <li>Id Token: @this.token.IdToken?.Length chars [<a href="https://jwt.ms/#id_token=@this.token.IdToken" target="id-token">view</a>]</li>
     </ul>
 }
 
