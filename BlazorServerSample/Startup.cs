@@ -35,6 +35,7 @@ namespace BlazorServerSample
                     var config = root.GetSection("app");
                     o.ClientId = config.GetValue<string>("clientId");
                     o.TenantId = config.GetValue<string>("tenantId");
+                    o.Authority = config.GetValue<string>("authority");
 
                     o.DefaultScopes = new string[] { "openid", "profile" };
                     o.PostLogoutUrl = "/loggedout";

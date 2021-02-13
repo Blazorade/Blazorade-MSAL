@@ -40,6 +40,28 @@ namespace Blazorade.Msal.Configuration
         public string TenantId { get; set; }
 
         /// <summary>
+        /// The full authority URI representing the Azure AD tenant that will take care of authenticating your users. If this
+        /// property is set, <see cref="TenantId"/> is ignored.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The <c>Authority</c> property allows you to use both Azure AD and Azure AD B2C. Depending on which directory
+        /// you are using, the value is constructed a bit differently.
+        /// </para>
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Azure AD</term>
+        /// <description>https://login.microsoftonline.com/{tenant-name}.onmicrosoft.com</description>
+        /// </item>
+        /// <item>
+        /// <term>Azure AD B2C</term>
+        /// <description>https://{tenant-name}.b2clogin.com/{tenant-name}.onmicrosoft.com/{policy-name}</description>
+        /// </item>
+        /// </list>
+        /// </remarks>
+        public string Authority { get; set; }
+
+        /// <summary>
         /// The MSAL Browser version to use.
         /// </summary>
         /// <remarks>
@@ -95,5 +117,13 @@ namespace Blazorade.Msal.Configuration
         /// </remarks>
         public TokenCacheScope TokenCacheScope { get; set; }
 
+
+
+        internal string GetAuthority()
+        {
+            return this.Authority?.Length > 0
+                ? this.Authority
+                : $"https://login.microsoftonline.com/{ this.TenantId ?? "common" }";
+        }
     }
 }

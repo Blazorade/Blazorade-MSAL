@@ -357,7 +357,7 @@ namespace Blazorade.Msal.Services
             var auth = new Dictionary<string, object>
             {
                 { "clientId", this.Options.ClientId },
-                { "authority", $"https://login.microsoftonline.com/{ this.Options.TenantId ?? "common" }" },
+                { "authority", this.Options.GetAuthority() },
                 { "navigateToLoginRequestUrl", navigateToLoginRequestUrl }
             };
 

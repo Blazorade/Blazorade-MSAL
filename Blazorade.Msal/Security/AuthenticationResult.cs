@@ -29,7 +29,7 @@ namespace Blazorade.Msal.Security
 
         public List<string> Scopes { get; set; }
 
-        public DateTimeOffset ExpiresOn { get; set; }
+        public DateTimeOffset? ExpiresOn { get; set; }
 
         public Account Account { get; set; }
 
