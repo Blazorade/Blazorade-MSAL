@@ -292,6 +292,15 @@ namespace Blazorade.Msal.Services
         }
 
         /// <summary>
+        /// Returns the keys representing the alternative options configured in the application.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<string> GetAlternativeOptionKeys()
+        {
+            return from x in this.Options.AlternativeOptions select x.Key;
+        }
+
+        /// <summary>
         /// Returns the default login hint for the current user. The default login hint is the login hint that was previously used to acquire a token.
         /// </summary>
         public async Task<string> GetDefaultLoginHintAsync()

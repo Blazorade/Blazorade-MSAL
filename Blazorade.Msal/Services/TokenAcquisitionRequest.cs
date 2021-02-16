@@ -58,5 +58,10 @@ namespace Blazorade.Msal.Services
         /// </summary>
         public IEnumerable<string> Scopes { get; set; }
 
+        /// <summary>
+        /// The key to the configured option to use for acquiring a token. The default options are used if not specified.
+        /// </summary>
+        public string OptionKey { get; set; }
+
     }
 }

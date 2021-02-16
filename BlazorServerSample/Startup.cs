@@ -29,19 +29,16 @@ namespace BlazorServerSample
             services
                 .AddRazorPages().Services
                 .AddServerSideBlazor().Services
-                .AddBlazoradeMsal((sp, o) =>
+                .AddBlazoradeMsal((sp, options) =>
                 {
                     var root = sp.GetService<IConfiguration>();
-                    var config = root.GetSection("app");
-                    o.ClientId = config.GetValue<string>("clientId");
-                    o.TenantId = config.GetValue<string>("tenantId");
-                    o.Authority = config.GetValue<string>("authority");
+                    root.GetSection("app").Bind(options);
 
-                    o.DefaultScopes = new string[] { "openid", "profile" };
-                    o.PostLogoutUrl = "/loggedout";
-                    o.RedirectUrl = "/login";
-                    o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
-                    o.TokenCacheScope = TokenCacheScope.Persistent;
+                    options.DefaultScopes = new string[] { "openid", "profile" };
+                    options.PostLogoutUrl = "/loggedout";
+                    options.RedirectUrl = "/login";
+                    options.InteractiveLoginMode = InteractiveLoginMode.Redirect;
+                    options.TokenCacheScope = TokenCacheScope.Persistent;
                 })
                 ;
         }
