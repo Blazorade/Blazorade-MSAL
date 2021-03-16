@@ -7,11 +7,14 @@ export function acquireTokenSilent(args) {
 
     let account = msalClient.getAccountByUsername(args.data.loginHint);
 
+    if (!account && args.data.fallbackToDefaultLoginHint) {
+        console.debug("acquireTokenSilent", "Provided login hint did not find an account. Falling back to previously stored default login hint.");
+        account = getDefaultAccount(args, msalClient);
+    }
+
     if (!account) {
+        // If we still don't have an account, then we need to log a warning.
         console.warn("acquireTokenSilent", "loginHint did not find an account. Tokens can most likely not be acquired without a found account.");
-        if (args.data.fallbackToDefaultLoginHint) {
-            account = getDefaultAccount(args, msalClient);
-        }
     }
 
     console.debug("acquireTokenSilent", "account", account);
