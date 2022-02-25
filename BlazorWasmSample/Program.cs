@@ -24,8 +24,7 @@ namespace BlazorWasmSample
                 {
                     var root = sp.GetService<IConfiguration>();
                     var config = root.GetSection("app");
-                    o.ClientId = config.GetValue<string>("clientId");
-                    o.TenantId = config.GetValue<string>("tenantId");
+                    config.Bind(o);
 
                     o.PostLogoutUrl = "/loggedout";
                     o.InteractiveLoginMode = InteractiveLoginMode.Redirect;
