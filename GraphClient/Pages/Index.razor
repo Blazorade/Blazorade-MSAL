@@ -1,9 +1,27 @@
 ﻿@page "/"
+@inject BlazoradeMsalService MsalService;
 
-<PageTitle>Index</PageTitle>
+@code {
 
-<h1>Hello, world!</h1>
+    private async Task<string> GetDataAsync()
+    {
+        var scopes = new List<string> { "User.Read", "Files.Read" };
+        var tokenResult = await this.MsalService.AcquireTokenAsync(scopes: scopes, fallbackToDefaultLoginHint: true);
+        return tokenResult.AccessToken;
+    }
+}
 
-Welcome to your new app.
+<PageTitle>Calling Microsoft Graph</PageTitle>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<h1>Read Graph Data</h1>
+<p>
+    Click the button below to read the following data by connecting to Microsoft Graph on behalf of the logged in user.
+</p>
+<ul>
+    <li>Basic user information</li>
+    <li>Files in the root of the user's OneDrive folder</li>
+</ul>
+
+<hr />
+
+<button class="btn btn-primary" @onclick="async (e) => await this.GetDataAsync()">Get Data</button>
