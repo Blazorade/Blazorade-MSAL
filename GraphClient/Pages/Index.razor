@@ -1,13 +1,29 @@
 ﻿@page "/"
+@using System.Net.Http;
 @inject BlazoradeMsalService MsalService;
 
 @code {
 
-    private async Task<string> GetDataAsync()
+    private HttpClient? Client = null;
+    private async Task<HttpClient> GetHttpClientAsync()
     {
-        var scopes = new List<string> { "User.Read", "Files.Read" };
-        var tokenResult = await this.MsalService.AcquireTokenAsync(scopes: scopes, fallbackToDefaultLoginHint: true);
-        return tokenResult.AccessToken;
+        if(null == this.Client)
+        {
+            var scopes = new string[] { "User.Read", "Files.Read" };
+            var authResult = await this.MsalService.AcquireTokenAsync(scopes: scopes, fallbackToDefaultLoginHint: true);
+
+            this.Client = new HttpClient();
+            this.Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+        }
+
+        return this.Client;
+    }
+
+    private async Task GetDataAsync()
+    {
+        var client = await this.GetHttpClientAsync();
+        var graphClient = new GraphServiceClient(client);
+        var me = await graphClient.Me.Request().GetAsync();
     }
 }
 
