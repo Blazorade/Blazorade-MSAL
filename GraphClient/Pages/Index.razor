@@ -1,0 +1,59 @@
+﻿@page "/"
+@using System.Net.Http;
+@inject BlazoradeMsalService MsalService;
+@inject HttpClientFactory ClientFactory;
+
+@code {
+    private string? meJson;
+    private string? driveJson;
+
+    private async Task GetUserObjectAsync()
+    {
+        var client = await this.ClientFactory.GetHttpClientAsync("User.Read");
+        this.meJson = await client.GetStringAsync("me");
+
+        this.StateHasChanged();
+    }
+
+    private async Task GetOneDriveDriveAsync()
+    {
+        var client = await this.ClientFactory.GetHttpClientAsync("Files.Read");
+        this.driveJson = await client.GetStringAsync("me/drive");
+        
+        this.StateHasChanged();
+    }
+}
+
+<PageTitle>Calling Microsoft Graph</PageTitle>
+
+<h1>Read Graph Data</h1>
+<p>
+    Click the button below to read the following data by connecting to Microsoft Graph on behalf of the currently logged in user.
+</p>
+<ul>
+    <li>User object</li>
+    <li>OneDrive drive</li>
+</ul>
+
+<button class="btn btn-primary" @onclick="async (e) => await this.GetUserObjectAsync()">Get User Object</button>
+<button class="btn btn-primary" @onclick="async (e) => await this.GetOneDriveDriveAsync()">Get OneDrive Drive</button>
+
+@if(this.meJson?.Length > 0 || this.driveJson?.Length > 0)
+{
+    <button class="btn btn-secondary" @onclick="async (e) => await this.MsalService.LogoutAsync()">Log Out</button>
+}
+<hr />
+
+@if(this.meJson?.Length > 0)
+{
+    <h3>Current User</h3>
+    <small>@DateTime.Now</small>
+    <pre>@this.meJson</pre>
+}
+
+@if(this.driveJson?.Length > 0)
+{
+    <h3>Current User's OneDrive</h3>
+    <small>@DateTime.Now</small>
+    <pre>@this.driveJson</pre>
+}
