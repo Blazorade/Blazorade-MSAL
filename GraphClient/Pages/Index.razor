@@ -1,29 +1,26 @@
 ﻿@page "/"
 @using System.Net.Http;
 @inject BlazoradeMsalService MsalService;
+@inject HttpClientFactory ClientFactory;
 
 @code {
+    private string? meJson;
+    private string? driveJson;
 
-    private HttpClient? Client = null;
-    private async Task<HttpClient> GetHttpClientAsync()
+    private async Task GetUserObjectAsync()
     {
-        if(null == this.Client)
-        {
-            var scopes = new string[] { "User.Read", "Files.Read" };
-            var authResult = await this.MsalService.AcquireTokenAsync(scopes: scopes, fallbackToDefaultLoginHint: true);
+        var client = await this.ClientFactory.GetHttpClientAsync("User.Read");
+        this.meJson = await client.GetStringAsync("me");
 
-            this.Client = new HttpClient();
-            this.Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.AccessToken);
-        }
-
-        return this.Client;
+        this.StateHasChanged();
     }
 
-    private async Task GetDataAsync()
+    private async Task GetOneDriveDriveAsync()
     {
-        var client = await this.GetHttpClientAsync();
-        var graphClient = new GraphServiceClient(client);
-        var me = await graphClient.Me.Request().GetAsync();
+        var client = await this.ClientFactory.GetHttpClientAsync("Files.Read");
+        this.driveJson = await client.GetStringAsync("me/drive");
+        
+        this.StateHasChanged();
     }
 }
 
@@ -31,13 +28,32 @@
 
 <h1>Read Graph Data</h1>
 <p>
-    Click the button below to read the following data by connecting to Microsoft Graph on behalf of the logged in user.
+    Click the button below to read the following data by connecting to Microsoft Graph on behalf of the currently logged in user.
 </p>
 <ul>
-    <li>Basic user information</li>
-    <li>Files in the root of the user's OneDrive folder</li>
+    <li>User object</li>
+    <li>OneDrive drive</li>
 </ul>
 
+<button class="btn btn-primary" @onclick="async (e) => await this.GetUserObjectAsync()">Get User Object</button>
+<button class="btn btn-primary" @onclick="async (e) => await this.GetOneDriveDriveAsync()">Get OneDrive Drive</button>
+
+@if(this.meJson?.Length > 0 || this.driveJson?.Length > 0)
+{
+    <button class="btn btn-secondary" @onclick="async (e) => await this.MsalService.LogoutAsync()">Log Out</button>
+}
 <hr />
 
-<button class="btn btn-primary" @onclick="async (e) => await this.GetDataAsync()">Get Data</button>
+@if(this.meJson?.Length > 0)
+{
+    <h3>Current User</h3>
+    <small>@DateTime.Now</small>
+    <pre>@this.meJson</pre>
+}
+
+@if(this.driveJson?.Length > 0)
+{
+    <h3>Current User's OneDrive</h3>
+    <small>@DateTime.Now</small>
+    <pre>@this.driveJson</pre>
+}
