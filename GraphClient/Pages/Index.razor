@@ -1,26 +1,34 @@
 ﻿@page "/"
-@using System.Net.Http;
+@inject HttpClient HttpClient;
 @inject BlazoradeMsalService MsalService;
-@inject HttpClientFactory ClientFactory;
+@inject BlazoradeRequestFactory RequestFactory;
 
 @code {
     private string? meJson;
     private string? driveJson;
 
+    private const string GraphBaseUri = "https://graph.microsoft.com/v1.0";
+
     private async Task GetUserObjectAsync()
     {
-        var client = await this.ClientFactory.GetHttpClientAsync("User.Read");
-        this.meJson = await client.GetStringAsync("me");
-
-        this.StateHasChanged();
+        var request = await this.RequestFactory.CreateGetRequestAsync($"{GraphBaseUri}/me", "User.Read");
+        var response = await this.HttpClient.SendAsync(request);
+        if(response.IsSuccessStatusCode)
+        {
+            this.meJson = await response.Content.ReadAsStringAsync();
+            this.StateHasChanged();
+        }
     }
 
     private async Task GetOneDriveDriveAsync()
     {
-        var client = await this.ClientFactory.GetHttpClientAsync("Files.Read");
-        this.driveJson = await client.GetStringAsync("me/drive");
-        
-        this.StateHasChanged();
+        var request = await this.RequestFactory.CreateGetRequestAsync($"{GraphBaseUri}/me/drive", "Files.Read");
+        var response = await this.HttpClient.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            this.driveJson = await response.Content.ReadAsStringAsync();
+            this.StateHasChanged();
+        }
     }
 }
 
