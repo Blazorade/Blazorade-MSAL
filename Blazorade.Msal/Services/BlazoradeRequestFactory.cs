@@ -56,9 +56,8 @@ namespace Blazorade.Msal.Services
         /// which is authorized with an access token for the given <paramref name="scopes"/>.
         /// </summary>
         /// <param name="requestUri">The URI for the request.</param>
-        /// <param name="method"></param>
-        /// <param name="scopes"></param>
-        /// <returns></returns>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreateRequestAsync(Uri requestUri, HttpMethod method, params string[] scopes)
         {
             var options = new CreateRequestOptions(requestUri)
@@ -70,59 +69,127 @@ namespace Blazorade.Msal.Services
             return await this.CreateRequestAsync(options);
         }
 
+        /// <summary>
+        /// Creates a request to the specified <paramref name="requestUri"/> with the specified <paramref name="method"/> 
+        /// which is authorized with an access token for the given <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="requestUri">The URI for the request.</param>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreateRequestAsync(string requestUri, HttpMethod method, params string[] scopes)
         {
             return await this.CreateRequestAsync(new Uri(requestUri, UriKind.RelativeOrAbsolute), method, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>DELETE</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreateDeleteRequestAsync(Uri requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Delete, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>DELETE</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreateDeleteRequestAsync(string requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Delete, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>GET</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreateGetRequestAsync(Uri requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Get, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>GET</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreateGetRequestAsync(string requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Get, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>PATCH</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreatePatchRequestAsync(Uri requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Patch, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>PATCH</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreatePatchRequestAsync(string requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Patch, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>POST</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreatePostRequestAsync(Uri requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Post, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>POST</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreatePostRequestAsync(string requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Post, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>PUT</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreatePutRequestAsync(Uri requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Put, scopes);
         }
 
+        /// <summary>
+        /// Creates a <c>PUT</c> request to <paramref name="requestUri"/> which is authorized an access token that
+        /// defines the scopes specified in <paramref name="scopes"/>.
+        /// </summary>
+        /// <param name="method">The HTTP method for the request.</param>
+        /// <param name="scopes">The scopes for the access token that the request will be authorized with.</param>
         public async Task<HttpRequestMessage> CreatePutRequestAsync(string requestUri, params string[] scopes)
         {
             return await this.CreateRequestAsync(requestUri, HttpMethod.Put, scopes);
         }
+
     }
 }
