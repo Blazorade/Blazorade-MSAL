@@ -18,6 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return services
                 .AddScoped<BlazoradeMsalService>()
+                .AddScoped<BlazoradeRequestFactory>()
                 ;
         }
 

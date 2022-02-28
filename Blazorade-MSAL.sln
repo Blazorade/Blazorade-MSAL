@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWasmSample", "BlazorW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedComponentsSample", "SharedComponentsSample\SharedComponentsSample.csproj", "{8616164C-935F-4118-848C-4592FDA21F9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphClient", "GraphClient\GraphClient.csproj", "{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphClient", "GraphClient\GraphClient.csproj", "{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

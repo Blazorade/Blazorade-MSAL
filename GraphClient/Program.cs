@@ -1,6 +1,5 @@
 using Blazorade.Msal.Configuration;
 using GraphClient;
-using GraphClient.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -16,10 +15,10 @@ builder.Services
         var config = root.GetSection("app");
         config.Bind(options);
 
+        options.InteractiveLoginMode = InteractiveLoginMode.Popup;
         options.PostLogoutUrl = "/loggedout";
         options.TokenCacheScope = TokenCacheScope.Persistent;
     })
-    .AddScoped<HttpClientFactory>()
     ;
 
 await builder.Build().RunAsync();
