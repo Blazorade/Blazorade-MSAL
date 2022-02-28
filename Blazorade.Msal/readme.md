@@ -22,3 +22,7 @@ The Github repository for Blazorade MSAL contains several sample applications th
 - [**GraphClient**](https://github.com/Blazorade/Blazorade-MSAL/tree/main/GraphClient) - A WebAssembly application that demonstrates how to send HTTP requests to Microsoft Graph with the help of Blazorade MSAL. Can be applied to any other REST API that requires access tokens.
 - [**BlazorServerSample**](https://github.com/Blazorade/Blazorade-MSAL/tree/main/BlazorServerSample) - A Blazor Server application that demonstrates how you can make use of the on-demand token acquisition provided by Blazorade MSAL.
 - [**BlazorWasmSample**](https://github.com/Blazorade/Blazorade-MSAL/tree/main/BlazorWasmSample) - The same as BlazorServerSample but implemented as a Blazor WebAssembly application. Shares much of the features with the Server sample through the [SharedComponentsSample](https://github.com/Blazorade/Blazorade-MSAL/tree/main/SharedComponentsSample) component library.
+
+## Further Reading
+
+To learn more, read these [Blazorade MSAL articles](https://mikaberglund.com/tag/blazorade-msal/) on Mika Berglund's blog.
