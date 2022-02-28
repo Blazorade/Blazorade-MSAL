@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,7 +13,6 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Blazor, Blazor Server, Blazor WASM, MSAL, Authentication</PackageTags>
     <PackageIcon>Blazorade-Icon-128.png</PackageIcon>
-    <PackageReleaseNotes>https://github.com/Blazorade/Blazorade-MSAL/releases/tag/v1.1.1</PackageReleaseNotes>
     <Copyright>Copyright (c) Mika Berglund 2022</Copyright>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>

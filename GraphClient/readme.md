@@ -32,3 +32,4 @@ Follow the steps below to register an application with Azure AD that you can use
 6. Go to the *Authentication* blade for the application.
 7. Under *Implicit grant and hybrid flows* make sure that both *Access tokens* and *ID tokens* checkboxes are checked.
 8. Save the changes to the application registration.
+9. Go to the *Overview* blade and copy the *Application (client) ID* and *Directory (tenant) ID* and store them in the configuration file described above.

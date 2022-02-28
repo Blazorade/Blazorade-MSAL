@@ -15,6 +15,7 @@ builder.Services
         var config = root.GetSection("app");
         config.Bind(options);
 
+        options.InteractiveLoginMode = InteractiveLoginMode.Popup;
         options.PostLogoutUrl = "/loggedout";
         options.TokenCacheScope = TokenCacheScope.Persistent;
     })
