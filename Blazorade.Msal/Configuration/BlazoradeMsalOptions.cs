@@ -13,18 +13,6 @@ namespace Blazorade.Msal.Configuration
     {
 
         /// <summary>
-        /// Creates a new instance of the class and sets the defaults.
-        /// </summary>
-        public BlazoradeMsalOptions()
-        {
-            this.MsalVersion = "2.11.0";
-            this.InteractiveLoginMode = InteractiveLoginMode.Redirect;
-            this.DefaultScopes = new string[] { "openid", "profile" };
-            this.TokenCacheScope = TokenCacheScope.Session;
-        }
-
-
-        /// <summary>
         /// The client ID representing your application.
         /// </summary>
         public string ClientId { get; set; }
@@ -65,9 +53,9 @@ namespace Blazorade.Msal.Configuration
         /// The MSAL Browser version to use.
         /// </summary>
         /// <remarks>
-        /// Defaults to 2.11.0. For more information see https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser.
+        /// Defaults to 2.22.0. For more information see https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-browser.
         /// </remarks>
-        public string MsalVersion { get; set; }
+        public string MsalVersion { get; set; } = "2.22.0";
 
         /// <summary>
         /// Defines how interactive login is handled.
@@ -75,7 +63,7 @@ namespace Blazorade.Msal.Configuration
         /// <remarks>
         /// Defaults to <see cref="InteractiveLoginMode.Redirect"/>.
         /// </remarks>
-        public InteractiveLoginMode InteractiveLoginMode { get; set; }
+        public InteractiveLoginMode InteractiveLoginMode { get; set; } = InteractiveLoginMode.Redirect;
 
         /// <summary>
         /// The default scopes to acquire if none are specified when acquiring tokens.
@@ -83,7 +71,7 @@ namespace Blazorade.Msal.Configuration
         /// <remarks>
         /// Defaults to an array with <c>openid</c> and <c>profile</c>.
         /// </remarks>
-        public IEnumerable<string> DefaultScopes { get; set; }
+        public IEnumerable<string> DefaultScopes { get; set; } = new string[] { "openid", "profile" };
 
         /// <summary>
         /// The redirect URI for your application.
@@ -115,7 +103,7 @@ namespace Blazorade.Msal.Configuration
         /// <remarks>
         /// Defaults to <see cref="TokenCacheScope.Session"/>.
         /// </remarks>
-        public TokenCacheScope TokenCacheScope { get; set; }
+        public TokenCacheScope TokenCacheScope { get; set; } = TokenCacheScope.Session;
 
 
 
