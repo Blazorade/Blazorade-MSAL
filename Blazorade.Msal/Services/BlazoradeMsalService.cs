@@ -330,6 +330,34 @@ namespace Blazorade.Msal.Services
         }
 
         /// <summary>
+        /// Checks whether the application has a valid token for the scenario specified in <paramref name="request"/>.
+        /// </summary>
+        /// <param name="request">Defines how to check for a token.</param>
+        /// <returns>
+        /// Returns <c>true</c> if there is a valid token available.
+        /// </returns>
+        /// <remarks>
+        /// This method calls the <see cref="AcquireTokenSilentAsync(TokenAcquisitionRequest)"/> method and catches any exceptions.
+        /// If there are no exceptions and the result of that method call contains both an access token and an ID token, this
+        /// method returns <c>true</c>. Otherwise the method returns <c>false</c>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">The exception that is thrown if <paramref name="request"/> is <c>null</c>.</exception>
+        public virtual async Task<bool> HasTokenAsync(TokenAcquisitionRequest request)
+        {
+            if (null == request) throw new ArgumentNullException(nameof(request));
+
+            try
+            {
+                request.FallbackToDefaultLoginHint = true;
+                var result = await this.AcquireTokenSilentAsync(request);
+                return result?.AccessToken?.Length > 0 && result?.IdToken?.Length > 0;
+            }
+            catch { }
+
+            return false;
+        }
+
+        /// <summary>
         /// Performs a logout of the current user.
         /// </summary>
         public async Task LogoutAsync()
