@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>1.1.1</Version>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>2.0.0</Version>
     <Authors>Mika Berglund</Authors>
     <Company>Blazorade</Company>
     <Product>Blazorade MSAL</Product>
@@ -13,8 +13,20 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>Blazor, Blazor Server, Blazor WASM, MSAL, Authentication</PackageTags>
     <PackageIcon>Blazorade-Icon-128.png</PackageIcon>
-    <PackageReleaseNotes>https://github.com/Blazorade/Blazorade-MSAL/releases/tag/v1.1.1</PackageReleaseNotes>
+    <Copyright>Copyright (c) Mika Berglund 2022</Copyright>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Blazorade-Icon-128.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Blazorade-Core\Blazorade.Core\Blazorade-Icon-128.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   
   <ItemGroup>
@@ -22,14 +34,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazorade.Core" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.2" />
+    <PackageReference Include="Blazorade.Core" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Blazorade-Icon-128.png">
+    <None Update="Blazorade-Icon-128.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+    <None Update="readme.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 

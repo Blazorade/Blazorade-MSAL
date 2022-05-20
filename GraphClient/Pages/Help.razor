@@ -1,0 +1,51 @@
+﻿@page "/help"
+@inject NavigationManager NavMan;
+
+@code {
+    private string GetRedirectUri()
+    {
+        var uri = new Uri(this.NavMan.Uri);
+        return $"{uri.Scheme}://{uri.Host}:{uri.Port}";
+    }
+}
+<PageTitle>Configuring the Sample</PageTitle>
+
+<h1>How to Configure This Sample Application</h1>
+<p>
+    This page describes what you need to do to get this application running on your local machine.
+    This information is also described in the <code>readme.md</code> file in the root folder for the project.
+</p>
+
+
+<h2>Azure AD Application Registration</h2>
+<p>
+    The first thing you need to do, is to create an application registration in Azure AD.
+</p>
+<ol>
+    <li>Log in to the <a href="https://aad.portal.azure.com/" target="_blank">Azure AD Portal</a> and go to the <a href="https://aad.portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps" target="_blank">App Registrations</a> blade</li>
+    <li>Create a new application registration by clicking the <em>New registration</em> button.</li>
+    <li>Given the application a name, for instance <em>Microsoft Graph with Blazorade MSAL</em></li>
+    <li>Under <em>Redirect URI</em>, select <em>Single-page application (SPA)</em>, and set the redirect URI to <code>@this.GetRedirectUri()</code></li>
+    <li>Click <em>Register</em></li>
+    <li>Go to the <em>Authentication</em> blade for the application you just registered</li>
+    <li>Under <em>Implicit grant and hybrid flows</em> make sure that both <em>Access tokens</em> and <em>ID tokens</em> checkboxes are checked</li>
+    <li>Save the changes to the application</li>
+    <li>Go to the <em>Overview</em> blade and copy the <em>Application (client) ID</em> and <em>Directory (tenant) ID</em> into the configuration file described below.</li>
+</ol>
+
+<h2>Application Settings</h2>
+<p>
+    The application settings file is not included in the source code, so you need to create it. The file is located in the <code>wwwroot</code> folder
+    and must be called <code>appsettings.json</code>. The contents of the file is shown below.
+</p>
+
+<pre>
+{
+    "app": {
+        "clientId": "&lt;Your application ID&gt;",
+        "tenantId": "&lt;Your tenant ID&gt;"
+    }
+}
+</pre>
+
+<p>The <code>clientId</code> and <code>tenantId</code> are copied from the application registration described above.</p>

@@ -1,0 +1,73 @@
+﻿@page "/"
+@inject HttpClient HttpClient;
+@inject BlazoradeMsalService MsalService;
+@inject BlazoradeRequestFactory RequestFactory;
+
+@code {
+    private string? meJson;
+    private string? driveJson;
+
+    private const string GraphBaseUri = "https://graph.microsoft.com/v1.0";
+
+    private async Task GetUserObjectAsync()
+    {
+        var request = await this.RequestFactory.CreateGetRequestAsync($"{GraphBaseUri}/me", "User.Read");
+        var response = await this.HttpClient.SendAsync(request);
+        if(response.IsSuccessStatusCode)
+        {
+            this.meJson = await response.Content.ReadAsStringAsync();
+            this.StateHasChanged();
+        }
+    }
+
+    private async Task GetOneDriveDriveAsync()
+    {
+        var request = await this.RequestFactory.CreateGetRequestAsync($"{GraphBaseUri}/me/drive", "Files.Read");
+        var response = await this.HttpClient.SendAsync(request);
+        if (response.IsSuccessStatusCode)
+        {
+            this.driveJson = await response.Content.ReadAsStringAsync();
+            this.StateHasChanged();
+        }
+    }
+}
+
+<PageTitle>Calling Microsoft Graph</PageTitle>
+
+<h1>Read Graph Data</h1>
+<p>
+    Click the button below to read the following data by connecting to Microsoft Graph on behalf of the currently logged in user.
+</p>
+<ul>
+    <li>User object</li>
+    <li>OneDrive drive</li>
+</ul>
+
+<button class="btn btn-primary" @onclick="async (e) => await this.GetUserObjectAsync()">Get User Object</button>
+<button class="btn btn-primary" @onclick="async (e) => await this.GetOneDriveDriveAsync()">Get OneDrive Drive</button>
+
+@if(this.meJson?.Length > 0 || this.driveJson?.Length > 0)
+{
+    <button class="btn btn-secondary" @onclick="async (e) => await this.MsalService.LogoutAsync()">Log Out</button>
+}
+<hr />
+
+@if(this.meJson?.Length > 0)
+{
+    <h3>Current User</h3>
+    <small>@DateTime.Now</small>
+    <pre>@this.meJson</pre>
+}
+
+@if(this.driveJson?.Length > 0)
+{
+    <h3>Current User's OneDrive</h3>
+    <small>@DateTime.Now</small>
+    <pre>@this.driveJson</pre>
+}
+
+<hr />
+<div class="alert alert-info" role="alert">
+  If you are running this sample for the first time, please make sure that you check out the <NavLink href="help">help section</NavLink>
+  for detailed information on how to configure this sample application to run on your local machine.
+</div>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazorade.Msal", "Blazorade.Msal\Blazorade.Msal.csproj", "{765AB143-8B42-45D1-B98B-DBAD2DDC400E}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWasmSample", "BlazorWasmSample\BlazorWasmSample.csproj", "{79286AAB-E3AF-4647-8EA6-B680DEE68DB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedComponentsSample", "SharedComponentsSample\SharedComponentsSample.csproj", "{8616164C-935F-4118-848C-4592FDA21F9D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphClient", "GraphClient\GraphClient.csproj", "{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,6 +97,18 @@ Global
 		{8616164C-935F-4118-848C-4592FDA21F9D}.Release|x64.Build.0 = Release|Any CPU
 		{8616164C-935F-4118-848C-4592FDA21F9D}.Release|x86.ActiveCfg = Release|Any CPU
 		{8616164C-935F-4118-848C-4592FDA21F9D}.Release|x86.Build.0 = Release|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Debug|x64.Build.0 = Debug|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Debug|x86.Build.0 = Debug|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Release|x64.ActiveCfg = Release|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Release|x64.Build.0 = Release|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Release|x86.ActiveCfg = Release|Any CPU
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +118,7 @@ Global
 		{C104334F-D15A-4DB7-8A5C-CA5E704B92B5} = {27D5BEFB-F2D9-4A84-A61F-E2ADA4F1B6E9}
 		{79286AAB-E3AF-4647-8EA6-B680DEE68DB6} = {27D5BEFB-F2D9-4A84-A61F-E2ADA4F1B6E9}
 		{8616164C-935F-4118-848C-4592FDA21F9D} = {27D5BEFB-F2D9-4A84-A61F-E2ADA4F1B6E9}
+		{B70A430C-BDAD-4B20-A435-9C9A7F4C8207} = {27D5BEFB-F2D9-4A84-A61F-E2ADA4F1B6E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A02B975-9E79-4692-8B2F-B5B4063C67FF}
