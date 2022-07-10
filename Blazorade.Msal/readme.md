@@ -23,6 +23,17 @@ The Github repository for Blazorade MSAL contains several sample applications th
 - [**BlazorServerSample**](https://github.com/Blazorade/Blazorade-MSAL/tree/main/BlazorServerSample) - A Blazor Server application that demonstrates how you can make use of the on-demand token acquisition provided by Blazorade MSAL.
 - [**BlazorWasmSample**](https://github.com/Blazorade/Blazorade-MSAL/tree/main/BlazorWasmSample) - The same as BlazorServerSample but implemented as a Blazor WebAssembly application. Shares much of the features with the Server sample through the [SharedComponentsSample](https://github.com/Blazorade/Blazorade-MSAL/tree/main/SharedComponentsSample) component library.
 
+## Version Highlights
+
+This section lists the main improvements in each published version.
+
+### v2.1.0
+
+This version includes the following pull requests.
+
+- [#24 Changed methods on `BlazoradeMsalService` to virtual](https://github.com/Blazorade/Blazorade-MSAL/pull/24)
+- [#25 Added HasTokenAsync method](https://github.com/Blazorade/Blazorade-MSAL/pull/25)
+
 ## Further Reading
 
 To learn more, read these [Blazorade MSAL articles](https://mikaberglund.com/tag/blazorade-msal/) on Mika Berglund's blog.

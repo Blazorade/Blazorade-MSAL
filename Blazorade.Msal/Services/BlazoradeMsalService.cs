@@ -81,7 +81,7 @@ namespace Blazorade.Msal.Services
         /// If that failes, then the interactive option is used using the <see cref="AcquireTokenInteractiveAsync"/> method.
         /// </remarks>
         /// <param name="request">Defines how to request for a token.</param>
-        public async Task<AuthenticationResult> AcquireTokenAsync(TokenAcquisitionRequest request)
+        public virtual async Task<AuthenticationResult> AcquireTokenAsync(TokenAcquisitionRequest request)
         {
             AuthenticationResult result = null;
 
@@ -133,7 +133,7 @@ namespace Blazorade.Msal.Services
         /// a popup dialog, or by redirecting the user to the login.
         /// </summary>
         /// <param name="request">Defines how to request for a token.</param>
-        public async Task<AuthenticationResult> AcquireTokenInteractiveAsync(TokenAcquisitionRequest request)
+        public virtual async Task<AuthenticationResult> AcquireTokenInteractiveAsync(TokenAcquisitionRequest request)
         {
             if (this.Options.InteractiveLoginMode == InteractiveLoginMode.Popup)
             {
@@ -172,7 +172,7 @@ namespace Blazorade.Msal.Services
         /// Acquires a token with a popup dialog.
         /// </summary>
         /// <param name="request">Defines how to request for a token.</param>
-        public async Task<AuthenticationResult> AcquireTokenPopupAsync(TokenAcquisitionRequest request)
+        public virtual async Task<AuthenticationResult> AcquireTokenPopupAsync(TokenAcquisitionRequest request)
         {
             if (null == request) throw new ArgumentNullException(nameof(request));
 
@@ -218,7 +218,7 @@ namespace Blazorade.Msal.Services
         /// Acquires a token by redirecting the user to the identity provider.
         /// </summary>
         /// <param name="request">Defines how to request for a token.</param>
-        public async Task AcquireTokenRedirectAsync(TokenAcquisitionRequest request)
+        public virtual async Task AcquireTokenRedirectAsync(TokenAcquisitionRequest request)
         {
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData(loginHint: request?.LoginHint, scopes: request?.Scopes, prompt: request?.Prompt);
@@ -265,7 +265,7 @@ namespace Blazorade.Msal.Services
         /// Acquires a token silently without user interaction.
         /// </summary>
         /// <param name="request">Defines how to request for a token.</param>
-        public async Task<AuthenticationResult> AcquireTokenSilentAsync(TokenAcquisitionRequest request)
+        public virtual async Task<AuthenticationResult> AcquireTokenSilentAsync(TokenAcquisitionRequest request)
         {
             AuthenticationResult result = null;
             var module = await this.GetBlazoradeModuleAsync();
@@ -294,7 +294,7 @@ namespace Blazorade.Msal.Services
         /// <summary>
         /// Returns the default login hint for the current user. The default login hint is the login hint that was previously used to acquire a token.
         /// </summary>
-        public async Task<string> GetDefaultLoginHintAsync()
+        public virtual async Task<string> GetDefaultLoginHintAsync()
         {
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData();
@@ -316,7 +316,7 @@ namespace Blazorade.Msal.Services
         /// Returns <c>null</c> if the current request is not a redirect back from the identity provider.
         /// </remarks>
         /// <exception cref="FailureCallbackException">The exception that is thrown if the current request is a redirect back from login, but the redirect specifies an error with the login.</exception>
-        public async Task<AuthenticationResult> HandleRedirectPromiseAsync()
+        public virtual async Task<AuthenticationResult> HandleRedirectPromiseAsync()
         {
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData(navigateToLoginRequestUrl: false);
@@ -330,9 +330,37 @@ namespace Blazorade.Msal.Services
         }
 
         /// <summary>
+        /// Checks whether the application has a valid token for the scenario specified in <paramref name="request"/>.
+        /// </summary>
+        /// <param name="request">Defines how to check for a token.</param>
+        /// <returns>
+        /// Returns <c>true</c> if there is a valid token available.
+        /// </returns>
+        /// <remarks>
+        /// This method calls the <see cref="AcquireTokenSilentAsync(TokenAcquisitionRequest)"/> method and catches any exceptions.
+        /// If there are no exceptions and the result of that method call contains both an access token and an ID token, this
+        /// method returns <c>true</c>. Otherwise the method returns <c>false</c>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">The exception that is thrown if <paramref name="request"/> is <c>null</c>.</exception>
+        public virtual async Task<bool> HasTokenAsync(TokenAcquisitionRequest request)
+        {
+            if (null == request) throw new ArgumentNullException(nameof(request));
+
+            try
+            {
+                request.FallbackToDefaultLoginHint = true;
+                var result = await this.AcquireTokenSilentAsync(request);
+                return result?.AccessToken?.Length > 0 && result?.IdToken?.Length > 0;
+            }
+            catch { }
+
+            return false;
+        }
+
+        /// <summary>
         /// Performs a logout of the current user.
         /// </summary>
-        public async Task LogoutAsync()
+        public virtual async Task LogoutAsync()
         {
             var module = await this.GetBlazoradeModuleAsync();
             var data = this.CreateMsalData();
