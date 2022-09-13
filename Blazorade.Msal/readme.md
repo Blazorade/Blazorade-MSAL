@@ -27,6 +27,13 @@ The Github repository for Blazorade MSAL contains several sample applications th
 
 This section lists the main improvements in each published version.
 
+### v2.2.0
+
+Added support for Azure AD B2C as Identity Provider.
+
+- [Azure AD B2C Support](https://github.com/Blazorade/Blazorade-MSAL/pull/26)
+- [Getting Started](https://github.com/Blazorade/Blazorade-MSAL/wiki/Getting-Started): Added documentation to the Getting Started section on how to configure your application for Azure AD B2C.
+
 ### v2.1.0
 
 This version includes the following pull requests.
