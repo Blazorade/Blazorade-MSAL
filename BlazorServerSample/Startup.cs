@@ -32,8 +32,7 @@ namespace BlazorServerSample
                 .AddBlazoradeMsal((sp, o) =>
                 {
                     var root = sp.GetService<IConfiguration>();
-                    var config = root.GetSection("app");
-                    config.Bind(o);
+                    root.GetSection("app").Bind(o);
 
                     o.DefaultScopes = new string[] { "openid", "profile" };
                     o.PostLogoutUrl = "/loggedout";
