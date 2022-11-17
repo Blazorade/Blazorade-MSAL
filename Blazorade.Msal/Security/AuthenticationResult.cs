@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Blazorade.Msal.Security
@@ -25,6 +28,9 @@ namespace Blazorade.Msal.Security
 
         public Dictionary<string, object> IdTokenClaims { get; set; }
 
+        public IEnumerable<Claim> AccessTokenClaims 
+            => ReadJwtToken(AccessToken);
+
         public string AccessToken { get; set; }
 
         public List<string> Scopes { get; set; }
@@ -35,5 +41,21 @@ namespace Blazorade.Msal.Security
 
         public bool FromCache { get; set; }
 
+        private IEnumerable<Claim> ReadJwtToken(string jwt)
+        {
+            if (string.IsNullOrEmpty(jwt))
+            {
+                return Enumerable.Empty<Claim>();
+            }
+
+            try
+            {
+                return new JwtSecurityTokenHandler().ReadJwtToken(AccessToken).Claims;
+            }
+            catch (Exception)
+            {
+                return Enumerable.Empty<Claim>();
+            }
+        }
     }
 }
